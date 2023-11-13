@@ -1,6 +1,10 @@
 import mongoose from "module";
 
 const IASchema = new mongoose.Schema({
+  id_category: {
+    type: Schema.Types.ObjectId,
+    ref: "categorias",
+  },
   IAname: {
     type: String,
     required: true,
@@ -33,5 +37,5 @@ const IASchema = new mongoose.Schema({
   },
 });
 
-const IAModel = mongoose.model("ferramentas", IASchema);
+const IAModel = mongoose.model("IA", IASchema);
 module.exports = IAModel;

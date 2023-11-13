@@ -1,25 +1,22 @@
-const { z } = require("zod");
-const { validateRequest } = require("zod-express-middleware");
-const { default: mongoose } = require("mongoose");
+import { z } from "zod";
+import { validateRequest } from "zod-express-middleware";
+import { default as mongoose } from "mongoose";
 
 const create = validateRequest({
-  //função de validação de criação da ferramenta
   body: z.object({
-    //o body deve ser validado. Ele é um objeto
-    categoryName: z.string({ required_error: "O nome é obrigatório" }), //verifica se o nome é uma string e se ele está presente. Em falha de qualquer um dos casos, retorna um erro
+    categoryName: z.string({ required_error: "O nome é obrigatório" }),
   }),
 });
 
 const destroy = validateRequest({
   params: z.object({
-    id: z.custom(mongoose.isValidObjectId, "O ID não é válido"), //se o id não for válido, ele manda a mensagem.
+    id: z.custom(mongoose.isValidObjectId, "O ID não é válido"),
   }),
 });
 
 const update = validateRequest({
-  //precisamos validar tanto o body quanto o params, já que recebemos dados dos dois
   body: z.object({
-    nome: z.string().optional(), //o .optional() possibilita que o usuário não precise de enviar todas as informações só para editar uma delas
+    nome: z.string().optional(),
   }),
 
   params: z.object({
@@ -27,7 +24,7 @@ const update = validateRequest({
   }),
 });
 
-module.exports = {
+export default {
   create,
   destroy,
   update,
