@@ -1,4 +1,6 @@
-import mongoose from "module";
+const mongoose = require("mongoose");
+
+const Schema = mongoose.Schema;
 
 const IASchema = new mongoose.Schema({
   id_category: {
