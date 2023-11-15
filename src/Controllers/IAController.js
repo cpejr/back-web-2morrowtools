@@ -13,10 +13,28 @@ class IAController {
 
   async read(req, res) {
     try {
-      const IA = await IAModel.read(req.body);
-      return res.status(200).json(IA);
+      const { id } = req.params;
+
+      if (id) {
+        // Se o ID estiver presente, busca por ID
+        const IAEncontrada = await IAModel.findById(id);
+
+        if (!IAEncontrada) {
+          return res
+            .status(404)
+            .json({ message: `IA com o ID ${id} não encontrada.` });
+        }
+
+        return res.status(200).json(IAEncontrada);
+      } else {
+        // Se o ID não estiver presente, faz uma busca sem critério específico
+        const IAs = await IAModel.find(req.body);
+        return res.status(200).json(IAs);
+      }
     } catch (error) {
-      res.status(500).json({ message: "ERRO", error: error.message });
+      res
+        .status(500)
+        .json({ message: "Erro ao buscar IA", error: error.message });
     }
   }
 

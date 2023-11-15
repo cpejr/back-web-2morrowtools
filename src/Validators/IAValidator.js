@@ -12,6 +12,7 @@ const create = validateRequest({
     imageURL: z.string({ required_error: "A imagem é obrigatória" }),
     link: z.string({ required_error: "O link é obrigatório" }),
     priceType: z.string({ required_error: "A precificação é obrigatória" }),
+    id_category: z.custom(mongoose.isValidObjectId, "O id da categoria não é válida"),
   }),
 });
 

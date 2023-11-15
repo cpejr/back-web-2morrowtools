@@ -7,9 +7,8 @@ const ToolCategoryValidator = require("./Validators/ToolCategoryValidator");
 const rotas = Router();
 
 //IA
-// rotas.post("/IA", IAValidator.create, IAController.create);
 rotas.post("/IA", IAValidator.create, IAController.create);
-rotas.get("/IA", IAController.read);
+rotas.get("/IA/:id?", IAController.read); 
 rotas.delete("/IA/:id", IAValidator.destroy, IAController.destroy);
 rotas.put("/IA/:id", IAValidator.update, IAController.update);
 
