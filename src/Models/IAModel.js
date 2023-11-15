@@ -33,7 +33,7 @@ const IASchema = new mongoose.Schema({
     trim: true,
   },
   priceType: {
-    type: Number,
+    type: String,
     require: true,
     trim: true,
   },
