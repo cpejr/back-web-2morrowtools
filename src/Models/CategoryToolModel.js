@@ -1,4 +1,4 @@
-import mongoose from "module";
+const mongoose = require("mongoose");
 
 const categorySchema = new mongoose.Schema({
   categoryName: {

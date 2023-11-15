@@ -1,18 +1,17 @@
-import { Router } from "express";
-
+const { Router } = require("express");
 const IAController = require("./Controllers/IAController");
-const IAValidator = require("./Validators/IAValidator").default;
+const IAValidator = require("./Validators/IAValidator");
 const ToolCategoryController = require("./Controllers/ToolCategoryController");
-const ToolCategoryValidator =
-  require("./Validators/ToolCategoryValidator").default;
+const ToolCategoryValidator = require("./Validators/ToolCategoryValidator");
 
 const rotas = Router();
 
 //IA
+// rotas.post("/IA", IAValidator.create, IAController.create);
 rotas.post("/IA", IAValidator.create, IAController.create);
 rotas.get("/IA", IAController.read);
 rotas.delete("/IA/:id", IAValidator.destroy, IAController.destroy);
-rotas.update("/IA/:id", IAValidator.update, IAController.update);
+rotas.put("/IA/:id", IAValidator.update, IAController.update);
 
 //category
 rotas.post(
@@ -26,7 +25,7 @@ rotas.delete(
   ToolCategoryValidator.destroy,
   ToolCategoryController.destroy
 );
-rotas.update(
+rotas.put(
   "/categorias/:id",
   ToolCategoryValidator.update,
   ToolCategoryController.update

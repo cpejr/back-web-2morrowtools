@@ -1,11 +1,13 @@
-import { z } from "zod";
-import { validateRequest } from "zod-express-middleware";
-import { default as mongoose } from "mongoose";
+const { z } = require("zod");
+const { validateRequest } = require("zod-express-middleware");
+const { default: mongoose } = require("mongoose");
 
 const create = validateRequest({
   body: z.object({
-    IAname: z.string({ required_error: "O nome é obrigatório" }), 
-    shortDescription: ({required_error: "A descrição curta é obrigatória",}),
+    IAname: z.string({ required_error: "O nome é obrigatório" }),
+    shortDescription: z.string({
+      required_error: "A descrição curta é obrigatória",
+    }),
     largeDescription: z.string({ required_error: "A descrição é obrigatória" }),
     imageURL: z.string({ required_error: "A imagem é obrigatória" }),
     link: z.string({ required_error: "O link é obrigatório" }),
@@ -32,7 +34,7 @@ const update = validateRequest({
   }),
 });
 
-export default {
+module.exports = {
   create,
   destroy,
   update,
