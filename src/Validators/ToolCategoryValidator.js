@@ -4,7 +4,14 @@ const { default: mongoose } = require("mongoose");
 
 const create = validateRequest({
   body: z.object({
-    name: z.string({ required_error: "The name is required" }),
+    name: z
+      .string({ required_error: "The name is required" })
+      .min(2, {
+        message: "Name must be at least 2 characters long",
+      })
+      .max(60, {
+        message: "Name cannot exceed 60 characters",
+      }),
   }),
 });
 
@@ -16,7 +23,13 @@ const destroy = validateRequest({
 
 const update = validateRequest({
   body: z.object({
-    name: z.string().optional(),
+    name: z
+      .string()
+      .min(2, {
+        message: "Name must be at least 2 characters long",
+      })
+      .max(60, { message: "Name cannot exceed 60 characters" })
+      .optional(),
   }),
 
   params: z.object({

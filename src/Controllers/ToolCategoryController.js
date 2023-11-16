@@ -25,13 +25,11 @@ class CategoryController {
 
       const foundCategory = await CategoryModel.findById(id);
       if (!foundCategory) {
-        return res
-          .status(404)
-          .json({ message: "Category with id " + id + " not found!" });
+        return res.status(404).json({ message: "Category not found!" });
       }
       await foundCategory.deleteOne();
       res.status(200).json({
-        message: "Category with id " + id + " successfully deleted!",
+        message: "Category successfully deleted!",
       });
     } catch (error) {
       res.status(500).json({ message: "ERROR", error: error.message });
@@ -43,9 +41,7 @@ class CategoryController {
       const { id } = req.params;
       const foundCategory = await CategoryModel.findById(id);
       if (!foundCategory)
-        return res
-          .status(404)
-          .json({ message: "Category with id " + id + " not found!" });
+        return res.status(404).json({ message: "Category not found!" });
       const category = await foundCategory.set(req.body).save();
       res.status(200).json(category);
     } catch (error) {

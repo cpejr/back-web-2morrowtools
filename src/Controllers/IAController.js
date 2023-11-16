@@ -19,9 +19,7 @@ class IAController {
         const foundIA = await IAModel.findById(id);
 
         if (!foundIA) {
-          return res
-            .status(404)
-            .json({ message: `IA with ID ${id} not found.` });
+          return res.status(404).json({ message: `ID not found.` });
         }
 
         return res.status(200).json(foundIA);
@@ -42,13 +40,11 @@ class IAController {
 
       const foundIA = await IAModel.findById(id);
       if (!foundIA) {
-        return res
-          .status(404)
-          .json({ message: "Tool with id " + id + " not found!" });
+        return res.status(404).json({ message: "Tool not found!" });
       }
       await foundIA.deleteOne();
       res.status(200).json({
-        message: "Tool with id " + id + " successfully deleted!",
+        message: "Tool successfully deleted!",
       });
     } catch (error) {
       res.status(500).json({ message: "ERROR", error: error.message });
@@ -59,10 +55,7 @@ class IAController {
     try {
       const { id } = req.params;
       const foundIA = await IAModel.findById(id);
-      if (!foundIA)
-        return res
-          .status(404)
-          .json({ message: "Tool with id " + id + " not found!" });
+      if (!foundIA) return res.status(404).json({ message: "Tool not found!" });
       const IA = await foundIA.set(req.body).save();
       res.status(200).json(IA);
     } catch (error) {
