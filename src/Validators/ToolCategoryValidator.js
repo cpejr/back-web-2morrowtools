@@ -4,23 +4,23 @@ const { default: mongoose } = require("mongoose");
 
 const create = validateRequest({
   body: z.object({
-    categoryName: z.string({ required_error: "O nome é obrigatório" }),
+    name: z.string({ required_error: "The name is required" }),
   }),
 });
 
 const destroy = validateRequest({
   params: z.object({
-    id: z.custom(mongoose.isValidObjectId, "O ID não é válido"),
+    id: z.custom(mongoose.isValidObjectId, "The ID is not valid"),
   }),
 });
 
 const update = validateRequest({
   body: z.object({
-    nome: z.string().optional(),
+    name: z.string().optional(),
   }),
 
   params: z.object({
-    id: z.custom(mongoose.isValidObjectId, "O ID não é válido"),
+    id: z.custom(mongoose.isValidObjectId, "The ID is not valid"),
   }),
 });
 

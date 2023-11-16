@@ -7,7 +7,7 @@ class IAController {
 
       return res.status(200).json(IA);
     } catch (error) {
-      res.status(500).json({ message: "ERRO", error: error.message });
+      res.status(500).json({ message: "ERROR", error: error.message });
     }
   }
 
@@ -16,25 +16,23 @@ class IAController {
       const { id } = req.params;
 
       if (id) {
-        // Se o ID estiver presente, busca por ID
-        const IAEncontrada = await IAModel.findById(id);
+        const foundIA = await IAModel.findById(id);
 
-        if (!IAEncontrada) {
+        if (!foundIA) {
           return res
             .status(404)
-            .json({ message: `IA com o ID ${id} não encontrada.` });
+            .json({ message: `IA with ID ${id} not found.` });
         }
 
-        return res.status(200).json(IAEncontrada);
+        return res.status(200).json(foundIA);
       } else {
-        // Se o ID não estiver presente, faz uma busca sem critério específico
         const IAs = await IAModel.find(req.body);
         return res.status(200).json(IAs);
       }
     } catch (error) {
       res
         .status(500)
-        .json({ message: "Erro ao buscar IA", error: error.message });
+        .json({ message: "Error while fetching IA", error: error.message });
     }
   }
 
@@ -42,33 +40,33 @@ class IAController {
     try {
       const { id } = req.params;
 
-      const IAEncontrada = await IAModel.findById(id);
-      if (!IAEncontrada) {
+      const foundIA = await IAModel.findById(id);
+      if (!foundIA) {
         return res
           .status(404)
-          .json({ message: "Ferramenta com id " + id + " não encontrada!" });
+          .json({ message: "Tool with id " + id + " not found!" });
       }
-      await IAEncontrada.deleteOne();
+      await foundIA.deleteOne();
       res.status(200).json({
-        mensagem: "Ferramenta com id " + id + " deletada com sucesso!",
+        message: "Tool with id " + id + " successfully deleted!",
       });
     } catch (error) {
-      res.status(500).json({ message: "ERRO", error: error.message });
+      res.status(500).json({ message: "ERROR", error: error.message });
     }
   }
 
   async update(req, res) {
     try {
       const { id } = req.params;
-      const IAEncontrada = await IAModel.findById(id);
-      if (!IAEncontrada)
+      const foundIA = await IAModel.findById(id);
+      if (!foundIA)
         return res
           .status(404)
-          .json({ message: "Ferramenta com id " + id + " não encontrada!" });
-      const IA = await IAEncontrada.set(req.body).save();
+          .json({ message: "Tool with id " + id + " not found!" });
+      const IA = await foundIA.set(req.body).save();
       res.status(200).json(IA);
     } catch (error) {
-      res.status(500).json({ message: "ERRO", error: error.message });
+      res.status(500).json({ message: "ERROR", error: error.message });
     }
   }
 }

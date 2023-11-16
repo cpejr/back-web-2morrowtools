@@ -4,10 +4,9 @@ class CategoryController {
   async create(req, res) {
     try {
       const category = await CategoryModel.create(req.body);
-
       return res.status(200).json(category);
     } catch (error) {
-      res.status(500).json({ message: "ERRO", error: error.message });
+      res.status(500).json({ message: "ERROR", error: error.message });
     }
   }
 
@@ -16,7 +15,7 @@ class CategoryController {
       const category = await CategoryModel.find(req.body);
       return res.status(200).json(category);
     } catch (error) {
-      res.status(500).json({ message: "ERRO", error: error.message });
+      res.status(500).json({ message: "ERROR", error: error.message });
     }
   }
 
@@ -24,35 +23,35 @@ class CategoryController {
     try {
       const { id } = req.params;
 
-      const categoryEncontrada = await CategoryModel.findById(id);
-      if (!categoryEncontrada) {
+      const foundCategory = await CategoryModel.findById(id);
+      if (!foundCategory) {
         return res
           .status(404)
-          .json({ message: "Categoria com id " + id + " não encontrada!" });
+          .json({ message: "Category with id " + id + " not found!" });
       }
-      await categoryEncontrada.deleteOne();
+      await foundCategory.deleteOne();
       res.status(200).json({
-        mensagem: "Categoria com id " + id + " deletada com sucesso!",
+        message: "Category with id " + id + " successfully deleted!",
       });
     } catch (error) {
-      res.status(500).json({ message: "ERRO", error: error.message });
+      res.status(500).json({ message: "ERROR", error: error.message });
     }
   }
 
-    async update(req, res) {
-      try {
-        const { id } = req.params;
-        const categoryEncontrada = await CategoryModel.findById(id);
-        if (!categoryEncontrada)
-          return res
-            .status(404)
-            .json({ message: "Categoria com id " + id + " não encontrada!" });
-        const category = await categoryEncontrada.set(req.body).save();
-        res.status(200).json(category);
-      } catch (error) {
-        res.status(500).json({ message: "ERRO", error: error.message });
-      }
+  async update(req, res) {
+    try {
+      const { id } = req.params;
+      const foundCategory = await CategoryModel.findById(id);
+      if (!foundCategory)
+        return res
+          .status(404)
+          .json({ message: "Category with id " + id + " not found!" });
+      const category = await foundCategory.set(req.body).save();
+      res.status(200).json(category);
+    } catch (error) {
+      res.status(500).json({ message: "ERROR", error: error.message });
     }
-
+  }
 }
+
 module.exports = new CategoryController();
