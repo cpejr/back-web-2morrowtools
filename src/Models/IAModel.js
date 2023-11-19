@@ -4,9 +4,20 @@ const Schema = mongoose.Schema;
 
 const IASchema = new mongoose.Schema(
   {
-    id_category: {
+    id_categoryfeature: {
       type: Schema.Types.ObjectId,
-      ref: "categories",
+      ref: "categoriesfeature",
+      required: true, //criar validators
+    },
+    id_categoryprice: {
+      type: Schema.Types.ObjectId,
+      ref: "categoriesprice",
+      required: true,
+    },
+    id_categoryprofession: {
+      type: Schema.Types.ObjectId,
+      ref: "categoriesprofession",
+      required: true,
     },
     name: {
       type: String,
@@ -37,6 +48,46 @@ const IASchema = new mongoose.Schema(
     priceType: {
       type: String,
       require: true,
+      trim: true,
+    },
+    linkYoutubeVideo: {
+      type: String,
+      trim: true,
+    },
+    linkedIn: {
+      type: String,
+      trim: true,
+    },
+    discord: {
+      type: String,
+      trim: true,
+    },
+    twitterX: {
+      type: String,
+      trim: true,
+    },
+    instagram: {
+      type: String,
+      trim: true,
+    },
+    tiktok: {
+      type: String,
+      trim: true,
+    },
+    facebook: {
+      type: String,
+      trim: true,
+    },
+    reddit: {
+      type: String,
+      trim: true,
+    },
+    pinterest: {
+      type: String,
+      trim: true,
+    },
+    youtube: {
+      type: String,
       trim: true,
     },
   },

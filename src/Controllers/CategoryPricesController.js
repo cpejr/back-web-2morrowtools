@@ -1,9 +1,8 @@
-const CategoryModel = require("../Models/CategoryToolModel");
-
+const CategoryPricesModel = require("../Models/CategoryPricesModel");
 class CategoryController {
   async create(req, res) {
     try {
-      const category = await CategoryModel.create(req.body);
+      const category = await CategoryPricesModel.create(req.body);
       return res.status(200).json(category);
     } catch (error) {
       res.status(500).json({ message: "ERROR", error: error.message });
@@ -12,7 +11,7 @@ class CategoryController {
 
   async read(req, res) {
     try {
-      const category = await CategoryModel.find(req.body);
+      const category = await CategoryPricesModel.find(req.body);
       return res.status(200).json(category);
     } catch (error) {
       res.status(500).json({ message: "ERROR", error: error.message });
@@ -23,7 +22,7 @@ class CategoryController {
     try {
       const { id } = req.params;
 
-      const foundCategory = await CategoryModel.findById(id);
+      const foundCategory = await CategoryPricesModel.findById(id);
       if (!foundCategory) {
         return res.status(404).json({ message: "Category not found!" });
       }
@@ -39,7 +38,7 @@ class CategoryController {
   async update(req, res) {
     try {
       const { id } = req.params;
-      const foundCategory = await CategoryModel.findById(id);
+      const foundCategory = await CategoryPricesModel.findById(id);
       if (!foundCategory)
         return res.status(404).json({ message: "Category not found!" });
       const category = await foundCategory.set(req.body).save();
