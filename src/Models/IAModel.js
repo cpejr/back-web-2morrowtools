@@ -7,7 +7,7 @@ const IASchema = new mongoose.Schema(
     id_categoryfeature: {
       type: Schema.Types.ObjectId,
       ref: "categoriesfeature",
-      required: true, //criar validators
+      required: true,
     },
     id_categoryprice: {
       type: Schema.Types.ObjectId,
