@@ -22,7 +22,7 @@ const create = validateRequest({
         message: "Large description must be at least 20 characters long",
       })
       .max(500, { message: "Large description cannot exceed 500 characters" }),
-    linkYoutubeVideo: z
+    youtubeVideoLink: z
       .string()
       .min(5, {
         message: "Name must be at least 5 characters long",
@@ -138,7 +138,7 @@ const update = validateRequest({
       })
       .max(500, { message: "Long description cannot exceed 500 characters" })
       .optional(),
-    linkYoutubeVideo: z
+    youtubeVideoLink: z
       .string()
       .min(5, {
         message: "Name must be at least 5 characters long",

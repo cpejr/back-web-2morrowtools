@@ -42,15 +42,15 @@ const IASchema = new mongoose.Schema(
     },
     link: {
       type: String,
-      require: true,
+      required: true,
       trim: true,
     },
     priceType: {
       type: String,
-      require: true,
+      required: true,
       trim: true,
     },
-    linkYoutubeVideo: {
+    youtubeVideoLink: {
       type: String,
       trim: true,
     },

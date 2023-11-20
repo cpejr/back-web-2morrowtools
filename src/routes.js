@@ -33,7 +33,7 @@ routes.put(
   CategoryFeatureValidator.update,
   CategoryFeatureController.update
 );
-// categoryPrices
+// CategoryPrices
 routes.post(
   "/categoriesprices",
   CategoryPricesValidator.create,
@@ -51,7 +51,7 @@ routes.put(
   CategoryPricesController.update
 );
 
-// categoryProfession
+// CategoryProfession
 routes.post(
   "/categoriesprofession",
   CategoryProfessionValidator.create,
