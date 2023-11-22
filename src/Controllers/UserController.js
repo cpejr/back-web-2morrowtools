@@ -1,16 +1,27 @@
 const express = require("express");
 const { json } = express;
 const UserModel = require("../Models/UserModel");
+const jwt = require("jsonwebtoken");
 
 class UserController {
   async create(req, res) {
     try {
-      const User = await UserModel.create(req.body);
+      const userFound = await UserModel.findOne({email: req.body.email});
 
-      const { password, ...userWithoutPassword } = User.toObject()
+      if(!userFound){
+        const userFound = await UserModel.create(req.body);
+        
+        //const { password, ...userWithoutPassword } = User.toObject()
       
-      await User.save();  
-      res.status(200).json(userWithoutPassword);
+        await userFound.save();
+      }
+
+      const token = jwt.sign({
+        userFound
+      }, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXPIRE_IN});
+      
+      return res.status(200).json({ token });
+      
     } catch (error) {
       res.status(500).json({ message: "ERRO", error: error.message });
     }

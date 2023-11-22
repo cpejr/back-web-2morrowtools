@@ -38,12 +38,11 @@ routes.put(
 
 //User
 routes.post("/User", UserValidator.create, UserController.create);
-routes.get("/User/:id?", verifyJwt, verifyUser, UserController.read);
-routes.delete("/User/:id", verifyJwt, verifyUser, UserValidator.destroy, UserController.destroy);
-routes.put("/User/:id", verifyJwt, verifyUser, UserValidator.update, UserController.update);
+routes.get("/User/:id?", /*verifyJwt, verifyUser,*/ UserController.read);
+routes.delete("/User/:id", /*verifyJwt, verifyUser,*/ UserValidator.destroy, UserController.destroy);
+routes.put("/User/:id", /*verifyJwt, verifyUser,*/ UserValidator.update, UserController.update);
 
 //Auth
-
 routes.post("/login", AuthValidator.login, AuthController.login);
 
 module.exports = routes;
