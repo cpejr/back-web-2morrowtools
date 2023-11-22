@@ -11,7 +11,7 @@ const IASchema = new mongoose.Schema(
     },
     id_categoryprice: {
       type: Schema.Types.ObjectId,
-      ref: "categoriesprice",
+      ref: "categoriesprices",
       required: true,
     },
     id_categoryprofession: {

@@ -24,7 +24,11 @@ class IAController {
 
         return res.status(200).json(foundIA);
       } else {
-        const IAs = await IAModel.find(req.body);
+        const IAs = await IAModel.find(req.body)
+          .populate("id_categoryfeature")
+          .populate("id_categoryprice")
+          .populate("id_categoryprofession");
+
         return res.status(200).json(IAs);
       }
     } catch (error) {
