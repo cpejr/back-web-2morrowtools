@@ -1,4 +1,5 @@
 const IAModel = require("../Models/IAModel");
+const convertStringToRegexp = require("../Utils/ConvertStringtoRegexp.js");
 
 class IAController {
   async create(req, res) {
@@ -35,6 +36,24 @@ class IAController {
       res
         .status(500)
         .json({ message: "Error while fetching IA", error: error.message });
+    }
+  }
+  async readByName(req, res) {
+    try {
+      const name = req.query?.name;
+      const regexName = new RegExp(name, "i");
+      const AIs = await IAModel.find({ name: regexName })
+        .sort("name")
+        .populate("id_categoryfeature")
+        .populate("id_categoryprice")
+        .populate("id_categoryprofession");
+
+      return res.status(200).json(AIs);
+    } catch (error) {
+      return res.status(500).json({
+        message: "Error while fetching AI by name",
+        error: error.message,
+      });
     }
   }
 

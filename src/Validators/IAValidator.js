@@ -14,14 +14,14 @@ const create = validateRequest({
       .min(2, {
         message: "Short description must be at least 2 characters long",
       })
-      .max(60, { message: "Short description cannot exceed 60 characters" }),
+      .max(100, { message: "Short description cannot exceed 60 characters" }),
 
     longDescription: z
       .string({ required_error: "The description is required" })
       .min(20, {
         message: "Large description must be at least 20 characters long",
       })
-      .max(500, { message: "Large description cannot exceed 500 characters" }),
+      .max(750, { message: "Large description cannot exceed 500 characters" }),
     youtubeVideoLink: z
       .string()
       .min(5, {
@@ -129,14 +129,14 @@ const update = validateRequest({
       .min(2, {
         message: "Short description must be at least 2 characters long",
       })
-      .max(60, { message: "Short description cannot exceed 60 characters" })
+      .max(100, { message: "Short description cannot exceed 60 characters" })
       .optional(),
     longDescription: z
       .string()
       .min(20, {
         message: "Long description must be at least 20 characters long",
       })
-      .max(500, { message: "Long description cannot exceed 500 characters" })
+      .max(750, { message: "Long description cannot exceed 500 characters" })
       .optional(),
     youtubeVideoLink: z
       .string()
