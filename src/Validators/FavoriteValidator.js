@@ -14,6 +14,11 @@ const destroy = validateRequest({
     id: z.custom(mongoose.isValidObjectId, "O ID não é válido"),
   }),
 });
+const read = validateRequest({
+  params: z.object({
+    userId: z.custom(mongoose.isValidObjectId, "Id do usuario é obrigatório"),
+  })
+})
 
 const update = validateRequest({
   body: z.object({
@@ -29,6 +34,7 @@ const update = validateRequest({
 
 module.exports = {
   create,
+  read,
   destroy,
   update,
 };
