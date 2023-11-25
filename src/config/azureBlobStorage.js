@@ -1,0 +1,91 @@
+const {
+  BlobServiceClient,
+  StorageSharedKeyCredential,
+} = require("@azure/storage-blob");
+const randomFileName = require("../../utils/general/nomeAleatoriodeArquivo.js");
+require("dotenv").config();
+
+const sharedKeyCredential = new StorageSharedKeyCredential(
+  process.env.AZURE_STORAGE_ACCOUNT_NAME,
+  process.env.AZURE_STORAGE_ACCOUNT_KEY
+);
+
+const blobServiceClient = new BlobServiceClient(
+  `https://${process.env.AZURE_STORAGE_ACCOUNT_NAME}.blob.core.windows.net`,
+  sharedKeyCredential
+);
+
+async function pegarAquivo(key) {
+  const containerClient = blobServiceClient.getContainerClient(
+    process.env.AZURE_STORAGE_CONTAINER_NAME
+  );
+  const blobClient = containerClient.getBlobClient(key);
+
+  const response = await blobClient.download(0);
+  const buffer = await streamToBuffer(response.readableStreamBody);
+
+  return buffer;
+}
+
+async function enviarArquivo({ file, ACL }) {
+  const containerClient = blobServiceClient.getContainerClient(
+    process.env.AZURE_STORAGE_CONTAINER_NAME
+  );
+
+  const key = randomFileName("") + ".json";
+  const blobClient = containerClient.getBlobClient(key);
+
+  const uploadResponse = await blobClient.upload(file, file.length, {
+    blobHTTPHeaders: { blobContentType: "application/json" },
+    metadata: { key: key },
+  });
+
+  return { key, ...uploadResponse._response.parsedBody };
+}
+
+async function enviarArquivos({ files, ACL }) {
+  return Promise.all(files.map(async (file) => enviarArquivo({ file, ACL })));
+}
+
+async function apagarArquivo(key) {
+  const containerClient = blobServiceClient.getContainerClient(
+    process.env.AZURE_STORAGE_CONTAINER_NAME
+  );
+  const blobClient = containerClient.getBlobClient(key);
+
+  await blobClient.delete();
+}
+
+async function apagarArquivos(keys) {
+  const containerClient = blobServiceClient.getContainerClient(
+    process.env.AZURE_STORAGE_CONTAINER_NAME
+  );
+
+  await Promise.all(
+    keys.map(async (key) => {
+      const blobClient = containerClient.getBlobClient(key);
+      await blobClient.delete();
+    })
+  );
+}
+
+async function streamToBuffer(readableStream) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    readableStream.on("data", (data) => {
+      chunks.push(data instanceof Buffer ? data : Buffer.from(data));
+    });
+    readableStream.on("end", () => {
+      resolve(Buffer.concat(chunks));
+    });
+    readableStream.on("error", reject);
+  });
+}
+
+module.exports = {
+  pegarAquivo,
+  enviarArquivo,
+  enviarArquivos,
+  apagarArquivo,
+  apagarArquivos,
+};
