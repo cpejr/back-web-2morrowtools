@@ -15,7 +15,7 @@ const blobServiceClient = new BlobServiceClient(
   sharedKeyCredential
 );
 
-async function pegarAquivo(key) {
+async function takeFile(key) {
   const containerClient = blobServiceClient.getContainerClient(
     process.env.AZURE_STORAGE_CONTAINER_NAME
   );
@@ -27,7 +27,7 @@ async function pegarAquivo(key) {
   return buffer;
 }
 
-async function enviarArquivo({ file, ACL }) {
+async function sendFile({ file, ACL }) {
   const containerClient = blobServiceClient.getContainerClient(
     process.env.AZURE_STORAGE_CONTAINER_NAME
   );
@@ -43,11 +43,11 @@ async function enviarArquivo({ file, ACL }) {
   return { key, ...uploadResponse._response.parsedBody };
 }
 
-async function enviarArquivos({ files, ACL }) {
+async function sendFiles({ files, ACL }) {
   return Promise.all(files.map(async (file) => enviarArquivo({ file, ACL })));
 }
 
-async function apagarArquivo(key) {
+async function deleteFile(key) {
   const containerClient = blobServiceClient.getContainerClient(
     process.env.AZURE_STORAGE_CONTAINER_NAME
   );
@@ -56,7 +56,7 @@ async function apagarArquivo(key) {
   await blobClient.delete();
 }
 
-async function apagarArquivos(keys) {
+async function deleteFiles(keys) {
   const containerClient = blobServiceClient.getContainerClient(
     process.env.AZURE_STORAGE_CONTAINER_NAME
   );
@@ -83,9 +83,9 @@ async function streamToBuffer(readableStream) {
 }
 
 module.exports = {
-  pegarAquivo,
-  enviarArquivo,
-  enviarArquivos,
-  apagarArquivo,
-  apagarArquivos,
+  takeFile,
+  sendFile,
+  sendFiles,
+  deleteFile,
+  deleteFiles,
 };
