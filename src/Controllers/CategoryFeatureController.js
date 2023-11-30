@@ -1,5 +1,4 @@
-const CategoryModel = require("../Models/CategoryToolModel");
-
+const CategoryModel = require("../Models/CategoryFeatureModel");
 class CategoryController {
   async create(req, res) {
     try {
