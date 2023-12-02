@@ -19,7 +19,9 @@ const CategoryProfessionValidator = require("./Validators/CategoryProfessionVali
 const routes = Router();
 
 // IA
+
 routes.post("/IA", IAValidator.create, IAController.create);
+routes.get("/IA/search-by-name", IAController.readByName);
 routes.get("/IA/:id?", IAController.read);
 routes.delete("/IA/:id", IAValidator.destroy, IAController.destroy);
 routes.put("/IA/:id", IAValidator.update, IAController.update);
