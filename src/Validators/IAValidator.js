@@ -93,7 +93,6 @@ const create = validateRequest({
       .optional(),
     imageURL: z.string({ required_error: "The image URL is required" }),
     link: z.string({ required_error: "The link is required" }),
-    priceType: z.string({ required_error: "The price type is required" }),
     id_categoryfeature: z.custom(
       mongoose.isValidObjectId,
       "The category feature ID is not valid"
@@ -210,7 +209,6 @@ const update = validateRequest({
 
     imageURL: z.string().optional(),
     link: z.string().optional(),
-    priceType: z.string().optional(),
     id_categoryfeature: z.custom(
       mongoose.isValidObjectId,
       "The category feature ID is not valid"
