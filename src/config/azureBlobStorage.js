@@ -1,9 +1,38 @@
-const {
-  BlobServiceClient,
-  StorageSharedKeyCredential,
-} = require("@azure/storage-blob");
+const { BlobServiceClient, StorageSharedKeyCredential } = require("@azure/storage-blob");
 const randomFileName = require("../../utils/general/nomeAleatoriodeArquivo.js");
 require("dotenv").config();
+
+const accountName = process.env.AZURE_STORAGE_ACCOUNT_NAME;
+const sasToken = process.env.AZURE_STORAGE_SAS_TOKEN;
+if (!accountName) throw Error("Azure Storage accountName not found");
+if (!sasToken) throw Error("Azure Storage accountKey not found");
+
+const blobServiceUri = `https://${accountName}.blob.core.windows.net`;
+
+// https://YOUR-RESOURCE-NAME.blob.core.windows.net?YOUR-SAS-TOKEN   ***VER SE NÃO VAI USAR ISSO. SE NÃO PREICSAR, TIRAR O blobServiceUri***
+// const blobServiceClient = new BlobServiceClient(
+//   `${blobServiceUri}?${sasToken}`,
+//   null
+// );
+
+// async function main() { ***NÃO DEVE PRECISAR DESSA FUNÇÃO***
+//   const containerName = "2morrowtools";
+//   const blobName = "2morrowtools";
+
+//   const timestamp = Date.now();
+//   const fileName = `my-new-file-${timestamp}.txt`;
+
+//   // create container client
+//   const containerClient = await blobServiceClient.getContainerClient(containerName);
+
+//   // create blob client
+//   const blobClient = await containerClient.getBlockBlobClient(blobName);
+
+//   // download file
+//   await blobClient.downloadToFile(fileName);
+
+//   console.log(`${fileName} downloaded`);
+// }
 
 const sharedKeyCredential = new StorageSharedKeyCredential(
   process.env.AZURE_STORAGE_ACCOUNT_NAME,
