@@ -15,6 +15,8 @@ const CategoryPricesController = require("./Controllers/CategoryPricesController
 const CategoryPricesValidator = require("./Validators/CategoryPricesValidator");
 const CategoryProfessionController = require("./Controllers/CategoryProfessionController");
 const CategoryProfessionValidator = require("./Validators/CategoryProfessionValidator");
+const CommentValidator = require("./Validators/CommentValidator");
+const CommentController = require("./Controllers/CommentController");
 
 const routes = Router();
 
@@ -93,5 +95,14 @@ routes.put(
   CategoryProfessionValidator.update,
   CategoryProfessionController.update
 );
+// Comment
+routes.post("/comment", CommentValidator.create, CommentController.create);
+routes.get("/comment", CommentController.read);
+routes.get("/comment/:id?", CommentController.readbyid);
+routes.delete("/comment/:id", CommentValidator.destroy, CommentController.destroy);
+routes.put("/comment/:id", CommentValidator.update, CommentController.update);
+routes.get("/comment/user/:id?", CommentController.readByUser);
+routes.get("/comment/IA/:id?", CommentController.readByIA);
+
 
 module.exports = routes;
