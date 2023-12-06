@@ -15,6 +15,8 @@ const CategoryPricesController = require("./Controllers/CategoryPricesController
 const CategoryPricesValidator = require("./Validators/CategoryPricesValidator");
 const CategoryProfessionController = require("./Controllers/CategoryProfessionController");
 const CategoryProfessionValidator = require("./Validators/CategoryProfessionValidator");
+const AvaliationValidator = require("./Validators/AvaliationValidator");
+const AvaliationController = require("./Controllers/AvaliationController");
 
 const routes = Router();
 
@@ -93,5 +95,11 @@ routes.put(
   CategoryProfessionValidator.update,
   CategoryProfessionController.update
 );
+
+// //Avaliation
+// routes.post("/avaliation", AvaliationValidator.create, AvaliationController.create);
+// routes.get("/avaliation", AvaliationValidator.read,  AvaliationController.read);
+// routes.delete("/Favorite", AvaliationValidator.destroy, AvaliationController.destroy);
+// routes.put("/avaliation", AvaliationValidator.update, AvaliationController.update);
 
 module.exports = routes;
