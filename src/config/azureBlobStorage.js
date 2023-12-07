@@ -1,5 +1,6 @@
 const { BlobServiceClient, StorageSharedKeyCredential } = require("@azure/storage-blob");
-const randomFileName = require("../../utils/general/nomeAleatoriodeArquivo.js");
+//const randomFileName = require("../../utils/general/nomeAleatoriodeArquivo.js");
+const randomFileName = require("../utils/general/nomeAleatoriodeArquivo");
 require("dotenv").config();
 
 const accountName = process.env.AZURE_STORAGE_ACCOUNT_NAME;
@@ -73,7 +74,7 @@ async function sendFile({ file, ACL }) {
 }
 
 async function sendFiles({ files, ACL }) {
-  return Promise.all(files.map(async (file) => enviarArquivo({ file, ACL })));
+  return Promise.all(files.map(async (file) => sendFile({ file, ACL })));
 }
 
 async function deleteFile(key) {

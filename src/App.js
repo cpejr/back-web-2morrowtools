@@ -5,6 +5,8 @@ const cors = require("cors");
 require("dotenv").config();
 const app = express();
 
+var bodyParser = require("body-parser");
+app.use(bodyParser.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());

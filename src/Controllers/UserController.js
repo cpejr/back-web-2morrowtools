@@ -3,22 +3,40 @@ const userModel = require("../Models/UserModel");
 const { takeFile, sendFile } = require("../config/azureBlobStorage");
 
 class UserController {
+  async create(req, res) {
+    try {
+      const users = await userModel.create(req.body);
+
+      const { senha, ...newUser } = users.toObject();
+
+      return res.status(200).json({ message: "Usuário cadastrado com sucesso!", users });
+    } catch (error) {
+      res.status(500).json({ message: "Erro!!", error: error.message });
+    }
+  }
+
+  async read(req, res) {
+    const users = await userModel.find();
+
+    return res.status(200).json(users);
+  }
+
   async readById(req, res) {
     const { id } = req.params;
 
-    const usuario = await userModel.findById(id);
+    const user = await userModel.findById(id);
 
-    return res.status(200).json(usuario);
+    return res.status(200).json(user);
   }
 
   async updateImage(req, res) {
     const { id } = req.params;
     if (!id) return;
 
-    const usuario = await userModel.findOne({ _id: id });
-    if (usuario.avatar_url) {
-      const chave = usuario.avatar_url;
-      await takeFile(chave);
+    const user = await userModel.findOne({ _id: id });
+    if (user.avatar_url) {
+      const imageKey = user.avatar_url;
+      await takeFile(imageKey);
     }
 
     const file = req.body.file;
@@ -26,35 +44,53 @@ class UserController {
       file,
       ACL: "public-read	",
     });
-    usuario.set({ avatar_url: key }); // O upload file não retorna uma url
-    await usuario.save();
+    user.set({ avatar_url: key }); // O upload file não retorna uma url
+    await user.save();
 
-    return res.status(200).json(usuario);
+    return res.status(200).json(user);
   }
 
   async takeImage(req, res) {
     const { id } = req.params;
 
-    const usuario = await userModel.findOne({ _id: id });
+    const user = await userModel.findOne({ _id: id });
 
-    let resultado;
+    let result;
 
-    if (!usuario.avatar_url) resultado = await takeFile("defaultPfp.json");
+    if (!user.avatar_url) result = await takeFile("defaultPfp.json");
     else {
       try {
-        resultado = await takeFile(usuario.avatar_url);
+        result = await takeFile(user.avatar_url);
       } catch (error) {
-        resultado = await takeFile("defaultPfp.json");
+        result = await takeFile("defaultPfp.json");
       }
     }
-    const imagem = JSON.parse(resultado);
+    const imagem = JSON.parse(result);
 
     return res.status(200).json(imagem);
   }
 
+  async update(req, res) {
+    const { id } = req.params;
+
+    const user = await userModel.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+
+    return res.status(200).json(user);
+  }
+
+  async destroy(req, res) {
+    const { id } = req.params;
+
+    const user = await userModel.findByIdAndDelete(id);
+
+    return res.status(200).json(user);
+  }
+
   async main() {
     const containerName = "2morrowtools";
-    const blobName = "REPLACE-WITH-EXISTING-BLOB-NAME";
+    const blobName = "2morrowtools";
 
     const timestamp = Date.now();
     const fileName = `my-new-file-${timestamp}.txt`;
