@@ -37,8 +37,15 @@ const update = validateRequest({
   }),
 });
 
+const readById = validateRequest({
+  body: z.object({
+    id: z.custom(mongoose.isValidObjectId, "The ID is not valid"),
+  }),
+});
+
 module.exports = {
   create,
   destroy,
   update,
+  readById,
 };

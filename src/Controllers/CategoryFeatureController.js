@@ -1,3 +1,4 @@
+const IAController = require("./IAController");
 const CategoryModel = require("../Models/CategoryFeatureModel");
 class CategoryController {
   async create(req, res) {
@@ -47,6 +48,19 @@ class CategoryController {
       res.status(500).json({ message: "ERROR", error: error.message });
     }
   }
+
+  // async readById(req, res) {
+  //   try {
+  //     const ias = await IAController.read(req, res);
+  //     console.log(ias);
+
+  //     return res
+  //       .status(200)
+  //       .json({ message: "ReadById completed successfully." });
+  //   } catch (error) {
+  //     res.status(500).json({ message: "ERROR", error: error.message });
+  //   }
+  // }
 }
 
 module.exports = new CategoryController();

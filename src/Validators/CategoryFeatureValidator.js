@@ -37,8 +37,17 @@ const update = validateRequest({
   }),
 });
 
+// const readById = validateRequest(
+//   z.object({
+//     params: z.object({
+//       _id: objectIdSchema("categoriesfeatures _id"),
+//     }),
+//   })
+// );
+
 module.exports = {
   create,
   destroy,
   update,
+  // readById,
 };

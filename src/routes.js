@@ -33,6 +33,10 @@ routes.post(
   CategoryFeatureController.create
 );
 routes.get("/categoriesfeature", CategoryFeatureController.read);
+// routes.get(
+//   "/categoriesfeature/readById/:_id",
+//   CategoryFeatureController.readById
+// );
 routes.delete(
   "/categoriesfeature/:id",
   CategoryFeatureValidator.destroy,
@@ -63,15 +67,35 @@ routes.put(
 
 //Favorites
 routes.post("/Favorite", FavoriteValidator.create, FavoriteController.create);
-routes.get("/Favorite/:userId?", FavoriteValidator.read,  FavoriteController.read);
-routes.delete("/Favorite/:id", FavoriteValidator.destroy, FavoriteController.destroy);
-routes.put("/Favorite/:id", FavoriteValidator.update, FavoriteController.update);
+routes.get(
+  "/Favorite/:userId?",
+  FavoriteValidator.read,
+  FavoriteController.read
+);
+routes.delete(
+  "/Favorite/:id",
+  FavoriteValidator.destroy,
+  FavoriteController.destroy
+);
+routes.put(
+  "/Favorite/:id",
+  FavoriteValidator.update,
+  FavoriteController.update
+);
 
 //User
 routes.post("/User", UserValidator.create, UserController.create);
 routes.get("/User/:id?", /*verifyJwt, verifyUser,*/ UserController.read);
-routes.delete("/User/:id", /*verifyJwt, verifyUser,*/ UserValidator.destroy, UserController.destroy);
-routes.put("/User/:id", /*verifyJwt, verifyUser,*/ UserValidator.update, UserController.update);
+routes.delete(
+  "/User/:id",
+  /*verifyJwt, verifyUser,*/ UserValidator.destroy,
+  UserController.destroy
+);
+routes.put(
+  "/User/:id",
+  /*verifyJwt, verifyUser,*/ UserValidator.update,
+  UserController.update
+);
 
 //Auth
 routes.post("/login", AuthValidator.login, AuthController.login);
