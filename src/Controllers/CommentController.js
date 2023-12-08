@@ -26,44 +26,7 @@ class CommentController {
 
     return res.status(200).json({ comments});
   }
-
-  async readByIA(req, res) {
-    const { id_is } = req.params;
-
-    const comments = await CommentModel.find({
-      id_ia: id_ia,
-    }).populate("id_ia", "name");
-
-    return res.status(200).json({ comments });
-  }
-
-
-  async readbyid(req, res) {
-    try {
-      const { id } = req.params;
-
-      if (id) {
-        const foundComment = await CommentModel.findById(id);
-
-        if (!foundComment) {
-          return res.status(404).json({ message: `ID not found.` });
-        }
-
-        return res.status(200).json(foundComment);
-      } else {
-        const Comments = await CommentModel.find(req.body)
-          .populate("id_user")
-          .populate("id_ia");
-
-        return res.status(200).json(IAs);
-      }
-    } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Error while fetching Comment", error: error.message });
-    }
-  }
-
+  
   async destroy(req, res) {
     try {
       const { id } = req.params;
