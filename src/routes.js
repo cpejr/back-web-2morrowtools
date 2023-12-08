@@ -96,10 +96,11 @@ routes.put(
   CategoryProfessionController.update
 );
 
-// //Avaliation
-// routes.post("/avaliation", AvaliationValidator.create, AvaliationController.create);
-// routes.get("/avaliation", AvaliationValidator.read,  AvaliationController.read);
-// routes.delete("/Favorite", AvaliationValidator.destroy, AvaliationController.destroy);
-// routes.put("/avaliation", AvaliationValidator.update, AvaliationController.update);
+//Avaliation
+routes.post("/avaliation", AvaliationValidator.create, AvaliationController.create);
+routes.get("/avaliation/:id?", AvaliationValidator.read,  AvaliationController.read);
+routes.delete("/avaliation/:id", AvaliationValidator.destroy, AvaliationController.destroy);
+routes.put("/avaliation/:id", AvaliationValidator.update, AvaliationController.update);
+
 
 module.exports = routes;

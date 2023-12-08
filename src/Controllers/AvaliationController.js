@@ -1,4 +1,5 @@
 const AvaliationModel = require("../Models/AvaliationModel");
+
 class AvaliationController {
   async create(req, res) {
     try {
