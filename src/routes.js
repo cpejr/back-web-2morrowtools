@@ -101,6 +101,6 @@ routes.post("/avaliation", AvaliationValidator.create, AvaliationController.crea
 routes.get("/avaliation", AvaliationValidator.read,  AvaliationController.read);
 routes.delete("/avaliation", AvaliationValidator.destroy, AvaliationController.destroy);
 routes.put("/avaliation/:id", AvaliationValidator.update, AvaliationController.update);
-routes.get("/avaliation/:iaId",  AvaliationController.useGetByIaId);
+routes.get("/avaliation/:iaId",  AvaliationController.getByIaId);
 
 module.exports = routes;
