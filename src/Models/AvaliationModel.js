@@ -4,19 +4,22 @@ const AvaliationSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       required: true,
       trim: true,
     },
-    iaId: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      trim: true,
-    },
-    rate: {
+     rate: {
       type: Number,
       required: true,
       trim: true,
-    },   
+    }, 
+    iaId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "IA",
+      required: true,
+      trim: true,
+    },
+     
   },
   {
     versionKey: false,

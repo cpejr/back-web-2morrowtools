@@ -48,6 +48,23 @@ class AvaliationController {
       res.status(500).json({ message: "ERROR", error: error.message });
     }
   }
+
+  async getByIaId(req, res) {
+  try {
+    const { iaId } = req.params;
+
+    // Realizar a busca das avaliações por iaId
+    const evaluations = await AvaliationModel.find({ iaId });
+
+    if (!evaluations || evaluations.length === 0) {
+      return res.status(404).json({ message: "No evaluations found for this IA!" });
+    }
+
+    return res.status(200).json({ evaluations });
+  } catch (error) {
+    res.status(500).json({ message: "ERROR", error: error.message });
+  }
+}
 }
 
 module.exports = new AvaliationController();
