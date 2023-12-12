@@ -1,5 +1,6 @@
 const IAController = require("./IAController");
 const CategoryModel = require("../Models/CategoryFeatureModel");
+const IAModel = require("../Models/IAModel");
 class CategoryController {
   async create(req, res) {
     try {
@@ -39,6 +40,7 @@ class CategoryController {
   async update(req, res) {
     try {
       const { id } = req.params;
+      console.log(id);
       const foundCategory = await CategoryModel.findById(id);
       if (!foundCategory)
         return res.status(404).json({ message: "Category not found!" });
@@ -49,18 +51,25 @@ class CategoryController {
     }
   }
 
-  // async readById(req, res) {
-  //   try {
-  //     const ias = await IAController.read(req, res);
-  //     console.log(ias);
+  async readById(req, res) {
+    try {
+      const { _id } = req.params;
 
-  //     return res
-  //       .status(200)
-  //       .json({ message: "ReadById completed successfully." });
-  //   } catch (error) {
-  //     res.status(500).json({ message: "ERROR", error: error.message });
-  //   }
-  // }
+      // Encontrar a categoria pelo ID
+      const foundCategory = await CategoryModel.findById(_id);
+      if (!foundCategory) {
+        return res.status(404).json({ message: "Category not found!" });
+      }
+
+      const tools = await IAModel.find({ id_categoryfeature: _id })
+        .populate("id_categoryfeature")
+        .populate("id_categoryprice")
+        .populate("id_categoryprofession");
+
+      return res.status(200).json(tools);
+    } catch (error) {
+      res.status(500).json({ message: "ERROR", error: error.message });
+    }
+  }
 }
-
 module.exports = new CategoryController();

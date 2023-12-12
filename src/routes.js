@@ -33,10 +33,10 @@ routes.post(
   CategoryFeatureController.create
 );
 routes.get("/categoriesfeature", CategoryFeatureController.read);
-// routes.get(
-//   "/categoriesfeature/readById/:_id",
-//   CategoryFeatureController.readById
-// );
+routes.get(
+  "/categoriesfeature/readById/:_id",
+  CategoryFeatureController.readById
+);
 routes.delete(
   "/categoriesfeature/:id",
   CategoryFeatureValidator.destroy,
