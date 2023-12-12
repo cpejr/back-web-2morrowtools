@@ -54,6 +54,10 @@ routes.post(
   CategoryPricesController.create
 );
 routes.get("/categoriesprices", CategoryPricesController.read);
+routes.get(
+  "/categoriesprices/readById/:_id",
+  CategoryPricesController.readById
+);
 routes.delete(
   "/categoriesprices/:id",
   CategoryFeatureValidator.destroy,
@@ -107,6 +111,10 @@ routes.post(
   CategoryProfessionController.create
 );
 routes.get("/categoriesprofession", CategoryProfessionController.read);
+routes.get(
+  "/categoriesprofession/readById/:_id",
+  CategoryProfessionController.readById
+);
 routes.delete(
   "/categoriesprofession/:id",
   CategoryProfessionValidator.destroy,

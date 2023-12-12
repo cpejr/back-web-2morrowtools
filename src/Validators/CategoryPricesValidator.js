@@ -1,3 +1,4 @@
+const objectIdSchema = require("../Utils/objectIdSchema");
 const { z } = require("zod");
 const { validateRequest } = require("zod-express-middleware");
 const { default: mongoose } = require("mongoose");
@@ -37,11 +38,13 @@ const update = validateRequest({
   }),
 });
 
-const readById = validateRequest({
-  body: z.object({
-    id: z.custom(mongoose.isValidObjectId, "The ID is not valid"),
-  }),
-});
+const readById = validateRequest(
+  z.object({
+    params: z.object({
+      _id: objectIdSchema("categoriesprices _id"),
+    }),
+  })
+);
 
 module.exports = {
   create,
