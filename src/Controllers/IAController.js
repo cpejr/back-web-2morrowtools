@@ -38,6 +38,21 @@ class IAController {
         .json({ message: "Error while fetching IA", error: error.message });
     }
   }
+
+  async getAllNames(req, res) {
+    try {
+      const names = await IAModel.find({}, { name: 1 });
+
+      const namesArray = names.map((ia) => ia.name);
+      return res.status(200).json(namesArray);
+    } catch (error) {
+      res.status(500).json({
+        message: "Error while fetching IA names",
+        error: error.message,
+      });
+    }
+  }
+
   async readByName(req, res) {
     try {
       const name = req.query?.name;
