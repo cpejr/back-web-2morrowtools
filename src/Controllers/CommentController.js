@@ -24,8 +24,6 @@ class CommentController {
       if (!foundComment) {
         return res.status(404).json({ message: "Comment not found!" });
       }
-      console.log(req.body)
-      console.log(foundComment)
       if(req.body.id_user_makingChange !== foundComment.id_user.toString() && req.body.type_user_makingChange !== 'Admin'){
         return res.status(401).json({ message: "You are not authorized to delete this comment" });
       }
