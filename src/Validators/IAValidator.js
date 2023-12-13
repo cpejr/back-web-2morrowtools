@@ -94,14 +94,8 @@ const create = validateRequest({
     imageURL: z.string({ required_error: "The image URL is required" }),
     link: z.string({ required_error: "The link is required" }),
     priceType: z.string({ required_error: "The price type is required" }),
-    id_categoryfeature: z.custom(
-      mongoose.isValidObjectId,
-      "The category feature ID is not valid"
-    ),
-    id_categoryprice: z.custom(
-      mongoose.isValidObjectId,
-      "The category price ID is not valid"
-    ),
+    id_categoryfeature: z.custom(mongoose.isValidObjectId, "The category feature ID is not valid"),
+    id_categoryprice: z.custom(mongoose.isValidObjectId, "The category price ID is not valid"),
 
     id_categoryprofession: z.custom(
       mongoose.isValidObjectId,
@@ -211,14 +205,8 @@ const update = validateRequest({
     imageURL: z.string().optional(),
     link: z.string().optional(),
     priceType: z.string().optional(),
-    id_categoryfeature: z.custom(
-      mongoose.isValidObjectId,
-      "The category feature ID is not valid"
-    ),
-    id_categoryprice: z.custom(
-      mongoose.isValidObjectId,
-      "The category price ID is not valid"
-    ),
+    id_categoryfeature: z.custom(mongoose.isValidObjectId, "The category feature ID is not valid"),
+    id_categoryprice: z.custom(mongoose.isValidObjectId, "The category price ID is not valid"),
     id_categoryprofession: z.custom(
       mongoose.isValidObjectId,
       "The category profession ID is not valid"
@@ -230,8 +218,21 @@ const update = validateRequest({
   }),
 });
 
+const updateIAImage = validateRequest({
+  params: z.object({
+    id: z.custom(mongoose.isValidObjectId, "O ID não é válido"), //se o id não for válido, ele manda a mensagem.
+  }),
+});
+const takeIAImage = validateRequest({
+  params: z.object({
+    id: z.custom(mongoose.isValidObjectId, "O ID não é válido"), //se o id não for válido, ele manda a mensagem.
+  }),
+});
+
 module.exports = {
   create,
   destroy,
   update,
+  updateIAImage,
+  takeIAImage,
 };

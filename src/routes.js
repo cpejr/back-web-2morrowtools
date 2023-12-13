@@ -17,12 +17,15 @@ routes.get("/user/:id?", UserController.read);
 routes.delete("/user/:id", UserController.destroy);
 routes.put("/user/:id", UserController.update);
 routes.put("/user/:id", UserController.updateImage);
+routes.get("/user/:id", UserController.takeImage);
 
 // IA
 routes.post("/IA", IAValidator.create, IAController.create);
 routes.get("/IA/:id?", IAController.read);
 routes.delete("/IA/:id", IAValidator.destroy, IAController.destroy);
 routes.put("/IA/:id", IAValidator.update, IAController.update);
+routes.get("/IA/:id", IAValidator.takeIAImage, IAController.takeIAImage);
+routes.put("/IA/:id", IAValidator.updateIAImage, IAController.updateIAImage);
 
 // CategoryFeature
 routes.post(

@@ -32,9 +32,7 @@ class IAController {
         return res.status(200).json(IAs);
       }
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Error while fetching IA", error: error.message });
+      res.status(500).json({ message: "Error while fetching IA", error: error.message });
     }
   }
 
@@ -65,6 +63,46 @@ class IAController {
     } catch (error) {
       res.status(500).json({ message: "ERROR", error: error.message });
     }
+  }
+  async updateIAImage(req, res) {
+    const { id } = req.params;
+    if (!id) return;
+
+    const foundIA = await IAModel.findOne({ _id: id });
+    if (foundIA.avatar_url) {
+      const imageKey = foundIA.avatar_url;
+      await takeFile(imageKey);
+    }
+
+    const file = req.body.file;
+    const { key } = await sendFile({
+      file,
+      ACL: "public-read	",
+    });
+    foundIA.set({ avatar_url: key }); // O upload file não retorna uma url
+    await foundIA.save();
+
+    return res.status(200).json(foundIA);
+  }
+
+  async takeIAImage(req, res) {
+    const { id } = req.params;
+
+    const foundIA = await IAModel.findOne({ _id: id });
+
+    let result;
+
+    if (!foundIA.avatar_url) result = await takeFile("defaultPfp.json");
+    else {
+      try {
+        result = await takeFile(foundIA.avatar_url);
+      } catch (error) {
+        result = await takeFile("defaultPfp.json");
+      }
+    }
+    const imagem = JSON.parse(result);
+
+    return res.status(200).json(imagem);
   }
 }
 
