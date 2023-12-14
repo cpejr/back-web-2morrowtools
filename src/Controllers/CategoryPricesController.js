@@ -18,6 +18,34 @@ class CategoryController {
     }
   }
 
+  async readByName(req, res) {
+    try {
+      const name = req?.query?.name;
+      const regexName = new RegExp(name, "i");
+      const categoryPrices = await CategoryPricesModel.find({
+        name: regexName,
+      }).sort("name");
+      return res.status(200).json(categoryPrices);
+    } catch (error) {
+      return res.status(500).json({
+        message: "Erro while fetching CategoryPrices by name",
+        error: error.message,
+      });
+    }
+  }
+  async readNames(req, res) {
+    try {
+      const names = await CategoryPricesModel.find({}, { name: 1 });
+      const namesArray = names.map((ia) => ia.name);
+      return res.status(200).json(namesArray);
+    } catch (error) {
+      res.status(500).json({
+        message: "Error while fetching CategoryPrices names",
+        error: error.message,
+      });
+    }
+  }
+
   async destroy(req, res) {
     try {
       const { id } = req.params;
