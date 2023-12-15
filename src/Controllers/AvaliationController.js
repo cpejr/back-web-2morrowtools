@@ -77,6 +77,18 @@ class AvaliationController {
       res.status(500).json({ message: "ERROR", error: error.message });
     }
   }
+
+  async destroyAll(req, res) {
+  try {
+    await AvaliationModel.deleteMany({});
+    res.status(200).json({
+      message: "All avaliations successfully deleted!",
+    });
+  } catch (error) {
+    res.status(500).json({ message: "ERROR", error: error.message });
+  }
+}
+
   
   
 }
