@@ -85,6 +85,51 @@ class IAController {
       res.status(500).json({ message: "ERROR", error: error.message });
     }
   }
+
+  async filterCategories(req, res) {
+    try {
+      let idsArray = [];
+      const { id } = req.query;
+
+      if (id) {
+        idsArray = id.split(",");
+      }
+
+      if (idsArray.length === 0) {
+        const allTools = await IAModel.find();
+        return res.status(200).json(allTools);
+      }
+
+      const foundCategories = await Promise.all([
+        CategoryPricesModel.find({ _id: { $in: idsArray } }),
+        CategoryProfessionModel.find({ _id: { $in: idsArray } }),
+        CategoryModel.find({ _id: { $in: idsArray } }),
+      ]);
+
+      const isValidCategories = foundCategories.some((data) => data.length > 0);
+      if (!isValidCategories) {
+        return res
+          .status(404)
+          .json({ message: "One or more categories not found!" });
+      }
+
+      const toolsPrice = await IAModel.find({
+        id_categoryprice: { $in: idsArray },
+      });
+      const toolsProfession = await IAModel.find({
+        id_categoryprofession: { $in: idsArray },
+      });
+      const toolsFeature = await IAModel.find({
+        id_categoryfeature: { $in: idsArray },
+      });
+
+      const tools = [...toolsPrice, ...toolsProfession, ...toolsFeature];
+
+      return res.status(200).json(tools);
+    } catch (error) {
+      res.status(500).json({ message: "ERROR", error: error.message });
+    }
+  }
 }
 
 module.exports = new IAController();
