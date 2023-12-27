@@ -18,9 +18,9 @@ const CategoryProfessionValidator = require("./Validators/CategoryProfessionVali
 
 const routes = Router();
 
-// IA
-
+// IAs
 routes.post("/IA", IAValidator.create, IAController.create);
+routes.get("/IA/search-by-category", IAController.filterCategories);
 routes.get("/IA/search-by-name", IAController.readByName);
 routes.get("/IA/:id?", IAController.read);
 routes.delete("/IA/:id", IAValidator.destroy, IAController.destroy);
@@ -32,11 +32,8 @@ routes.post(
   CategoryFeatureValidator.create,
   CategoryFeatureController.create
 );
+
 routes.get("/categoriesfeature", CategoryFeatureController.read);
-routes.get(
-  "/categoriesfeature/readById/:_id",
-  CategoryFeatureController.readById
-);
 routes.delete(
   "/categoriesfeature/:id",
   CategoryFeatureValidator.destroy,
@@ -54,10 +51,6 @@ routes.post(
   CategoryPricesController.create
 );
 routes.get("/categoriesprices", CategoryPricesController.read);
-routes.get(
-  "/categoriesprices/readById/:_id",
-  CategoryPricesController.readById
-);
 routes.delete(
   "/categoriesprices/:id",
   CategoryFeatureValidator.destroy,
@@ -111,10 +104,6 @@ routes.post(
   CategoryProfessionController.create
 );
 routes.get("/categoriesprofession", CategoryProfessionController.read);
-routes.get(
-  "/categoriesprofession/readById/:_id",
-  CategoryProfessionController.readById
-);
 routes.delete(
   "/categoriesprofession/:id",
   CategoryProfessionValidator.destroy,
@@ -125,5 +114,6 @@ routes.put(
   CategoryProfessionValidator.update,
   CategoryProfessionController.update
 );
+// Category Filter
 
 module.exports = routes;

@@ -1,5 +1,8 @@
 const IAModel = require("../Models/IAModel");
 const convertStringToRegexp = require("../Utils/ConvertStringtoRegexp.js");
+const CategoryPricesModel = require("../Models/CategoryPricesModel.js");
+const CategoryProfessionModel = require("../Models/CategoryProfessionModel.js");
+const CategoryModel = require("../Models/CategoryFeatureModel.js");
 
 class IAController {
   async create(req, res) {
@@ -115,13 +118,24 @@ class IAController {
 
       const toolsPrice = await IAModel.find({
         id_categoryprice: { $in: idsArray },
-      });
+      })
+        .populate("id_categoryfeature")
+        .populate("id_categoryprice")
+        .populate("id_categoryprofession");
+
       const toolsProfession = await IAModel.find({
         id_categoryprofession: { $in: idsArray },
-      });
+      })
+        .populate("id_categoryfeature")
+        .populate("id_categoryprice")
+        .populate("id_categoryprofession");
+
       const toolsFeature = await IAModel.find({
         id_categoryfeature: { $in: idsArray },
-      });
+      })
+        .populate("id_categoryfeature")
+        .populate("id_categoryprice")
+        .populate("id_categoryprofession");
 
       const tools = [...toolsPrice, ...toolsProfession, ...toolsFeature];
 
