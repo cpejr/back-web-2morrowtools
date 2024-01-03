@@ -1,4 +1,6 @@
+const IAController = require("./IAController");
 const CategoryModel = require("../Models/CategoryFeatureModel");
+const IAModel = require("../Models/IAModel");
 class CategoryController {
   async create(req, res) {
     try {
@@ -48,5 +50,4 @@ class CategoryController {
     }
   }
 }
-
 module.exports = new CategoryController();

@@ -18,9 +18,9 @@ const CategoryProfessionValidator = require("./Validators/CategoryProfessionVali
 
 const routes = Router();
 
-// IA
-
+// IAs
 routes.post("/IA", IAValidator.create, IAController.create);
+routes.get("/IA/search-by-category", IAController.filterCategories);
 routes.get("/IA/search-by-name", IAController.readByName);
 routes.get("/IA/:id?", IAController.read);
 routes.delete("/IA/:id", IAValidator.destroy, IAController.destroy);
@@ -32,6 +32,7 @@ routes.post(
   CategoryFeatureValidator.create,
   CategoryFeatureController.create
 );
+
 routes.get("/categoriesfeature", CategoryFeatureController.read);
 routes.delete(
   "/categoriesfeature/:id",
@@ -63,15 +64,35 @@ routes.put(
 
 //Favorites
 routes.post("/Favorite", FavoriteValidator.create, FavoriteController.create);
-routes.get("/Favorite/:userId?", FavoriteValidator.read,  FavoriteController.read);
-routes.delete("/Favorite/:id", FavoriteValidator.destroy, FavoriteController.destroy);
-routes.put("/Favorite/:id", FavoriteValidator.update, FavoriteController.update);
+routes.get(
+  "/Favorite/:userId?",
+  FavoriteValidator.read,
+  FavoriteController.read
+);
+routes.delete(
+  "/Favorite/:id",
+  FavoriteValidator.destroy,
+  FavoriteController.destroy
+);
+routes.put(
+  "/Favorite/:id",
+  FavoriteValidator.update,
+  FavoriteController.update
+);
 
 //User
 routes.post("/User", UserValidator.create, UserController.create);
 routes.get("/User/:id?", /*verifyJwt, verifyUser,*/ UserController.read);
-routes.delete("/User/:id", /*verifyJwt, verifyUser,*/ UserValidator.destroy, UserController.destroy);
-routes.put("/User/:id", /*verifyJwt, verifyUser,*/ UserValidator.update, UserController.update);
+routes.delete(
+  "/User/:id",
+  /*verifyJwt, verifyUser,*/ UserValidator.destroy,
+  UserController.destroy
+);
+routes.put(
+  "/User/:id",
+  /*verifyJwt, verifyUser,*/ UserValidator.update,
+  UserController.update
+);
 
 //Auth
 routes.post("/login", AuthValidator.login, AuthController.login);
@@ -93,5 +114,6 @@ routes.put(
   CategoryProfessionValidator.update,
   CategoryProfessionController.update
 );
+// Category Filter
 
 module.exports = routes;

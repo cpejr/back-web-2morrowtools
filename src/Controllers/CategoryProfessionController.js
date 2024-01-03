@@ -1,4 +1,5 @@
 const CategoryProfessionModel = require("../Models/CategoryProfessionModel");
+const IAModel = require("../Models/IAModel");
 class CategoryController {
   async create(req, res) {
     try {

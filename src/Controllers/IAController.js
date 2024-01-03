@@ -1,5 +1,8 @@
 const IAModel = require("../Models/IAModel");
 const convertStringToRegexp = require("../Utils/ConvertStringtoRegexp.js");
+const CategoryPricesModel = require("../Models/CategoryPricesModel.js");
+const CategoryProfessionModel = require("../Models/CategoryProfessionModel.js");
+const CategoryModel = require("../Models/CategoryFeatureModel.js");
 
 class IAController {
   async create(req, res) {
@@ -81,6 +84,62 @@ class IAController {
       if (!foundIA) return res.status(404).json({ message: "Tool not found!" });
       const IA = await foundIA.set(req.body).save();
       res.status(200).json(IA);
+    } catch (error) {
+      res.status(500).json({ message: "ERROR", error: error.message });
+    }
+  }
+
+  async filterCategories(req, res) {
+    try {
+      let idsArray = [];
+      const { id } = req.query;
+
+      if (id) {
+        idsArray = id.split(",");
+      }
+
+      if (idsArray.length === 0) {
+        const allTools = await IAModel.find();
+        return res.status(200).json(allTools);
+      }
+
+      const foundCategories = await Promise.all([
+        CategoryPricesModel.find({ _id: { $in: idsArray } }),
+        CategoryProfessionModel.find({ _id: { $in: idsArray } }),
+        CategoryModel.find({ _id: { $in: idsArray } }),
+      ]);
+
+      const isValidCategories = foundCategories.some((data) => data.length > 0);
+      if (!isValidCategories) {
+        return res
+          .status(404)
+          .json({ message: "One or more categories not found!" });
+      }
+
+      const toolsPrice = await IAModel.find({
+        id_categoryprice: { $in: idsArray },
+      })
+        .populate("id_categoryfeature")
+        .populate("id_categoryprice")
+        .populate("id_categoryprofession");
+
+      const toolsProfession = await IAModel.find({
+        id_categoryprofession: { $in: idsArray },
+      })
+        .populate("id_categoryfeature")
+        .populate("id_categoryprice")
+        .populate("id_categoryprofession");
+
+      const toolsFeature = await IAModel.find({
+        id_categoryfeature: { $in: idsArray },
+      })
+        .populate("id_categoryfeature")
+        .populate("id_categoryprice")
+        .populate("id_categoryprofession");
+
+      const tools = [...toolsPrice, ...toolsProfession, ...toolsFeature];
+
+      return res.status(200).json(tools);
     } catch (error) {
       res.status(500).json({ message: "ERROR", error: error.message });
     }
