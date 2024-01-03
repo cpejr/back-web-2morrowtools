@@ -40,7 +40,6 @@ class CategoryController {
   async update(req, res) {
     try {
       const { id } = req.params;
-      console.log(id);
       const foundCategory = await CategoryModel.findById(id);
       if (!foundCategory)
         return res.status(404).json({ message: "Category not found!" });
