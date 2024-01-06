@@ -19,21 +19,28 @@ const CategoryProfessionValidator = require("./Validators/CategoryProfessionVali
 const routes = Router();
 
 // IAs
+
 routes.post("/IA", IAValidator.create, IAController.create);
 routes.get("/IA/search-by-category", IAController.filterCategories);
 routes.get("/IA/search-by-name", IAController.readByName);
+routes.get("/IA/names", IAController.getAllNames);
 routes.get("/IA/:id?", IAController.read);
 routes.delete("/IA/:id", IAValidator.destroy, IAController.destroy);
 routes.put("/IA/:id", IAValidator.update, IAController.update);
 
 // CategoryFeature
+
 routes.post(
   "/categoriesfeature",
   CategoryFeatureValidator.create,
   CategoryFeatureController.create
 );
-
 routes.get("/categoriesfeature", CategoryFeatureController.read);
+routes.get(
+  "/categoriesfeature/search-by-name",
+  CategoryFeatureController.readByName
+);
+routes.get("/categoriesfeature/names", CategoryFeatureController.readNames);
 routes.delete(
   "/categoriesfeature/:id",
   CategoryFeatureValidator.destroy,
@@ -44,12 +51,19 @@ routes.put(
   CategoryFeatureValidator.update,
   CategoryFeatureController.update
 );
+
 // CategoryPrices
+
 routes.post(
   "/categoriesprices",
   CategoryPricesValidator.create,
   CategoryPricesController.create
 );
+routes.get(
+  "/categoriesprices/search-by-name",
+  CategoryPricesController.readByName
+);
+routes.get("/categoriesprices/names", CategoryPricesController.readNames);
 routes.get("/categoriesprices", CategoryPricesController.read);
 routes.delete(
   "/categoriesprices/:id",
@@ -63,6 +77,7 @@ routes.put(
 );
 
 //Favorites
+
 routes.post("/Favorite", FavoriteValidator.create, FavoriteController.create);
 routes.get(
   "/Favorite/:userId?",
@@ -81,6 +96,7 @@ routes.put(
 );
 
 //User
+
 routes.post("/User", UserValidator.create, UserController.create);
 routes.get("/User/:id?", /*verifyJwt, verifyUser,*/ UserController.read);
 routes.delete(
@@ -95,13 +111,23 @@ routes.put(
 );
 
 //Auth
+
 routes.post("/login", AuthValidator.login, AuthController.login);
 
 // CategoryProfession
+
 routes.post(
   "/categoriesprofession",
   CategoryProfessionValidator.create,
   CategoryProfessionController.create
+);
+routes.get(
+  "/categoriesprofession/search-by-name",
+  CategoryProfessionController.readByName
+);
+routes.get(
+  "/categoriesprofession/names",
+  CategoryProfessionController.readNames
 );
 routes.get("/categoriesprofession", CategoryProfessionController.read);
 routes.delete(
@@ -114,6 +140,5 @@ routes.put(
   CategoryProfessionValidator.update,
   CategoryProfessionController.update
 );
-// Category Filter
 
 module.exports = routes;
