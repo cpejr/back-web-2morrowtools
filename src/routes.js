@@ -19,11 +19,34 @@ const CategoryProfessionValidator = require("./Validators/CategoryProfessionVali
 
 const routes = Router();
 
+// User
+
+routes.post("/User", UserValidator.create, UserController.create);
+routes.get("/User/:id?", UserController.read);
+routes.delete(
+  "/User/:id",
+  // verifyJwt,
+  // verifyUser,
+  UserValidator.destroy,
+  UserController.destroy
+);
+routes.put(
+  "/User/:id",
+  // verifyJwt,
+  // verifyUser,
+  UserValidator.update,
+  UserController.update
+);
+
+// Auth
+
+routes.post("/login", AuthValidator.login, AuthController.login);
+
 // IAs
 
 routes.post(
   "/IA",
-  verifyJwt,
+  // verifyJwt,
   verifyIsAdm,
   IAValidator.create,
   IAController.create
@@ -34,14 +57,14 @@ routes.get("/IA/names", IAController.getAllNames);
 routes.get("/IA/:id?", IAController.read);
 routes.delete(
   "/IA/:id",
-  verifyJwt,
+  // verifyJwt,
   verifyIsAdm,
   IAValidator.destroy,
   IAController.destroy
 );
 routes.put(
   "/IA/:id",
-  verifyJwt,
+  // verifyJwt,
   verifyIsAdm,
   IAValidator.update,
   IAController.update
@@ -51,7 +74,7 @@ routes.put(
 
 routes.post(
   "/categoriesfeature",
-  verifyJwt,
+  // verifyJwt,
   verifyIsAdm,
   CategoryFeatureValidator.create,
   CategoryFeatureController.create
@@ -64,14 +87,14 @@ routes.get(
 routes.get("/categoriesfeature/names", CategoryFeatureController.readNames);
 routes.delete(
   "/categoriesfeature/:id",
-  verifyJwt,
+  // verifyJwt,
   verifyIsAdm,
   CategoryFeatureValidator.destroy,
   CategoryFeatureController.destroy
 );
 routes.put(
   "/categoriesfeature/:id",
-  verifyJwt,
+  // verifyJwt,
   verifyIsAdm,
   CategoryFeatureValidator.update,
   CategoryFeatureController.update
@@ -81,7 +104,7 @@ routes.put(
 
 routes.post(
   "/categoriesprices",
-  verifyJwt,
+  // verifyJwt,
   verifyIsAdm,
   CategoryPricesValidator.create,
   CategoryPricesController.create
@@ -94,14 +117,14 @@ routes.get("/categoriesprices/names", CategoryPricesController.readNames);
 routes.get("/categoriesprices", CategoryPricesController.read);
 routes.delete(
   "/categoriesprices/:id",
-  verifyJwt,
+  // verifyJwt,
   verifyIsAdm,
   CategoryFeatureValidator.destroy,
   CategoryPricesController.destroy
 );
 routes.put(
   "/categoriesprices/:id",
-  verifyJwt,
+  // verifyJwt,
   verifyIsAdm,
   CategoryFeatureValidator.update,
   CategoryPricesController.update
@@ -111,51 +134,28 @@ routes.put(
 
 routes.post(
   "/Favorite",
-  verifyJwt,
+  // verifyJwt,
   FavoriteValidator.create,
   FavoriteController.create
 );
 routes.get(
   "/Favorite/:userId?",
-  verifyJwt,
+  // verifyJwt,
   FavoriteValidator.read,
   FavoriteController.read
 );
 routes.delete(
   "/Favorite/:id",
-  verifyJwt,
+  // verifyJwt,
   FavoriteValidator.destroy,
   FavoriteController.destroy
 );
 routes.put(
   "/Favorite/:id",
-  verifyJwt,
+  // verifyJwt,
   FavoriteValidator.update,
   FavoriteController.update
 );
-
-//User
-
-routes.post("/User", UserValidator.create, UserController.create);
-routes.get("/User/:id?", UserController.read);
-routes.delete(
-  "/User/:id",
-  verifyJwt,
-  // verifyUser,
-  UserValidator.destroy,
-  UserController.destroy
-);
-routes.put(
-  "/User/:id",
-  verifyJwt,
-  // verifyUser,
-  UserValidator.update,
-  UserController.update
-);
-
-//Auth
-
-routes.post("/login", AuthValidator.login, AuthController.login);
 
 // CategoryProfession
 
@@ -177,14 +177,14 @@ routes.get(
 routes.get("/categoriesprofession", CategoryProfessionController.read);
 routes.delete(
   "/categoriesprofession/:id",
-  verifyJwt,
+  // verifyJwt,
   verifyIsAdm,
   CategoryProfessionValidator.destroy,
   CategoryProfessionController.destroy
 );
 routes.put(
   "/categoriesprofession/:id",
-  verifyJwt,
+  // verifyJwt,
   verifyIsAdm,
   CategoryProfessionValidator.update,
   CategoryProfessionController.update
