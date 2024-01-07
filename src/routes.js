@@ -161,7 +161,7 @@ routes.post("/login", AuthValidator.login, AuthController.login);
 
 routes.post(
   "/categoriesprofession",
-  verifyJwt,
+  // verifyJwt,
   verifyIsAdm,
   CategoryProfessionValidator.create,
   CategoryProfessionController.create

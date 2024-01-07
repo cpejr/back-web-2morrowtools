@@ -2,7 +2,10 @@ const express = require("express");
 const { json } = express;
 const UserModel = require("../Models/UserModel");
 const jwt = require("jsonwebtoken");
-const { setCurrentUserEmail } = require("../Utils/globalVariables");
+const {
+  setCurrentUserEmail,
+  getCurrentUserEmail,
+} = require("../Utils/globalVariables");
 
 class UserController {
   async create(req, res) {
@@ -26,6 +29,8 @@ class UserController {
       );
 
       setCurrentUserEmail(req.body.email);
+      const userEmail = getCurrentUserEmail();
+      console.log("Email no Controller", userEmail);
 
       return res.status(200).json({ token });
     } catch (error) {

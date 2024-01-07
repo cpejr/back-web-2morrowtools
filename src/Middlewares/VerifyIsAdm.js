@@ -2,9 +2,9 @@ const { getCurrentUserEmail } = require("../Utils/globalVariables");
 
 function verifyIsAdm(req, res, next) {
   const userEmail = getCurrentUserEmail();
-  console.log(userEmail);
+  console.log("Email no middlware", userEmail);
 
-  if (req.userType === "Admin" || userEmail === "amandaalves@cpejr.com.br") {
+  if (req.userType === "Admin" || userEmail === process.env.USER_ADM_EMAIL) {
     return next();
   }
 
