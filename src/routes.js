@@ -103,4 +103,5 @@ routes.delete("/avaliation/:id", AvaliationValidator.destroy, AvaliationControll
 routes.put("/avaliation/:id", AvaliationValidator.update, AvaliationController.update);
 routes.get("/avaliation/:iaId",  AvaliationController.getByIaId);
 routes.delete("/avaliation", AvaliationController.destroyAll);
+
 module.exports = routes;
