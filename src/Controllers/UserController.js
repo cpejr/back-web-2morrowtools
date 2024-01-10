@@ -1,5 +1,3 @@
-const express = require("express");
-const { json } = express;
 const UserModel = require("../Models/UserModel");
 const jwt = require("jsonwebtoken");
 const {
@@ -27,9 +25,9 @@ class UserController {
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRE_IN }
       );
-      // console.log("o token eh:", token); // Pega o valor certinho
+
       setCurrentUserEmail(req.body.email);
-      setCurrentUserToken(token); // O VerifyJWT não consegue pegar ele, tá chegando como NULL
+      setCurrentUserToken(token);
 
       return res.status(200).json({ token });
     } catch (error) {
