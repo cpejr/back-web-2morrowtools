@@ -9,6 +9,12 @@ class IAController {
     try {
       const IA = await IAModel.create(req.body);
 
+        //Embeds youtube url
+        if (!IA.youtubeVideoLink.includes("/embed")) {
+          IA.youtubeVideoLink = IA.youtubeVideoLink.replace("watch?v=", "embed/");
+          await IA.save()
+        }
+
       return res.status(200).json(IA);
     } catch (error) {
       res.status(500).json({ message: "ERROR", error: error.message });
