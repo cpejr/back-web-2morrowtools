@@ -7,8 +7,9 @@ const UserController = require("./Controllers/UserController");
 const UserValidator = require("./Validators/UserValidator");
 const AuthController = require("./Controllers/AuthController");
 const AuthValidator = require("./Validators/AuthValidator");
-const verifyJwt = require("./Middlewares/VerifyJwt");
-const verifyUser = require("./Middlewares/VerifyUser");
+// const verifyJwt = require("./Middlewares/VerifyJwt");
+// const verifyUser = require("./Middlewares/VerifyUser");
+const verifyIsAdm = require("./Middlewares/VerifyIsAdm");
 const CategoryFeatureController = require("./Controllers/CategoryFeatureController");
 const CategoryFeatureValidator = require("./Validators/CategoryFeatureValidator");
 const CategoryPricesController = require("./Controllers/CategoryPricesController");
@@ -18,20 +19,49 @@ const CategoryProfessionValidator = require("./Validators/CategoryProfessionVali
 
 const routes = Router();
 
+// User
+
+routes.post("/User", UserValidator.create, UserController.create);
+routes.get("/User/:id?", UserController.read);
+routes.delete(
+  "/User/:id",
+  // verifyJwt,
+  // verifyUser,
+  UserValidator.destroy,
+  UserController.destroy
+);
+routes.put(
+  "/User/:id",
+  // verifyJwt,
+  // verifyUser,
+  UserValidator.update,
+  UserController.update
+);
+
+// Auth
+
+routes.post("/login", AuthValidator.login, AuthController.login);
+
 // IAs
 
-routes.post("/IA", IAValidator.create, IAController.create);
+routes.post("/IA", verifyIsAdm, IAValidator.create, IAController.create);
 routes.get("/IA/search-by-category", IAController.filterCategories);
 routes.get("/IA/search-by-name", IAController.readByName);
 routes.get("/IA/names", IAController.getAllNames);
 routes.get("/IA/:id?", IAController.read);
-routes.delete("/IA/:id", IAValidator.destroy, IAController.destroy);
-routes.put("/IA/:id", IAValidator.update, IAController.update);
+routes.delete(
+  "/IA/:id",
+  verifyIsAdm,
+  IAValidator.destroy,
+  IAController.destroy
+);
+routes.put("/IA/:id", verifyIsAdm, IAValidator.update, IAController.update);
 
 // CategoryFeature
 
 routes.post(
   "/categoriesfeature",
+  verifyIsAdm,
   CategoryFeatureValidator.create,
   CategoryFeatureController.create
 );
@@ -43,11 +73,13 @@ routes.get(
 routes.get("/categoriesfeature/names", CategoryFeatureController.readNames);
 routes.delete(
   "/categoriesfeature/:id",
+  verifyIsAdm,
   CategoryFeatureValidator.destroy,
   CategoryFeatureController.destroy
 );
 routes.put(
   "/categoriesfeature/:id",
+  verifyIsAdm,
   CategoryFeatureValidator.update,
   CategoryFeatureController.update
 );
@@ -56,6 +88,7 @@ routes.put(
 
 routes.post(
   "/categoriesprices",
+  verifyIsAdm,
   CategoryPricesValidator.create,
   CategoryPricesController.create
 );
@@ -67,11 +100,13 @@ routes.get("/categoriesprices/names", CategoryPricesController.readNames);
 routes.get("/categoriesprices", CategoryPricesController.read);
 routes.delete(
   "/categoriesprices/:id",
+  verifyIsAdm,
   CategoryFeatureValidator.destroy,
   CategoryPricesController.destroy
 );
 routes.put(
   "/categoriesprices/:id",
+  verifyIsAdm,
   CategoryFeatureValidator.update,
   CategoryPricesController.update
 );
@@ -95,29 +130,11 @@ routes.put(
   FavoriteController.update
 );
 
-//User
-
-routes.post("/User", UserValidator.create, UserController.create);
-routes.get("/User/:id?", /*verifyJwt, verifyUser,*/ UserController.read);
-routes.delete(
-  "/User/:id",
-  /*verifyJwt, verifyUser,*/ UserValidator.destroy,
-  UserController.destroy
-);
-routes.put(
-  "/User/:id",
-  /*verifyJwt, verifyUser,*/ UserValidator.update,
-  UserController.update
-);
-
-//Auth
-
-routes.post("/login", AuthValidator.login, AuthController.login);
-
 // CategoryProfession
 
 routes.post(
   "/categoriesprofession",
+  verifyIsAdm,
   CategoryProfessionValidator.create,
   CategoryProfessionController.create
 );
@@ -132,11 +149,13 @@ routes.get(
 routes.get("/categoriesprofession", CategoryProfessionController.read);
 routes.delete(
   "/categoriesprofession/:id",
+  verifyIsAdm,
   CategoryProfessionValidator.destroy,
   CategoryProfessionController.destroy
 );
 routes.put(
   "/categoriesprofession/:id",
+  verifyIsAdm,
   CategoryProfessionValidator.update,
   CategoryProfessionController.update
 );
