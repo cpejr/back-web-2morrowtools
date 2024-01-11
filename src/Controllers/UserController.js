@@ -6,22 +6,22 @@ const jwt = require("jsonwebtoken");
 class UserController {
   async create(req, res) {
     try {
-      const userFound = await UserModel.findOne({email: req.body.email});
+      let userFound = await UserModel.findOne({ email: req.body.email });
 
-      if(!userFound){
-        const userFound = await UserModel.create(req.body);
-        
-        //const { password, ...userWithoutPassword } = User.toObject()
-      
+      if (!userFound) {
+        userFound = await UserModel.create(req.body);
         await userFound.save();
       }
 
-      const token = jwt.sign({
-        userFound
-      }, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXPIRE_IN});
-      
-      return res.status(200).json({ token });
-      
+      const token = jwt.sign(
+        {
+          userFound,
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: process.env.JWT_EXPIRE_IN }
+      );
+
+      return res.status(200).json({ token, userFound });
     } catch (error) {
       res.status(500).json({ message: "ERRO", error: error.message });
     }
@@ -29,11 +29,10 @@ class UserController {
 
   async read(req, res) {
     try {
-
       const { id } = req.params;
-    
+
       const User = await UserModel.findById(id);
-      
+
       res.status(200).json(User);
     } catch (error) {
       res.status(500).json({ message: "ERRO", error: error.message });
@@ -46,16 +45,12 @@ class UserController {
 
       const userFound = await UserModel.findById(id);
       if (!userFound) {
-        return res
-          .status(404)
-          .json({ message: "Usuário com id " + id + " não encontrado!" });
+        return res.status(404).json({ message: "Usuário com id " + id + " não encontrado!" });
       }
       await userFound.deleteOne();
-      res
-        .status(200)
-        .json({
-          mensagem: "Usuário com id " + id + " deletado com sucesso!",
-        });
+      res.status(200).json({
+        mensagem: "Usuário com id " + id + " deletado com sucesso!",
+      });
     } catch (error) {
       res.status(500).json({ message: "ERRO", error: error.message });
     }
@@ -63,12 +58,12 @@ class UserController {
 
   async update(req, res) {
     try {
-      const { id } = req.params; 
+      const { id } = req.params;
       const userFound = await UserModel.findById(id);
       if (!userFound)
         return res.status(404).json({ message: "Usuário com id " + id + " não encontrado!" });
-      const User = await userFound.set(req.body).save(); 
-      res.status(200).json(User); 
+      const User = await userFound.set(req.body).save();
+      res.status(200).json(User);
     } catch (error) {
       res.status(500).json({ message: "ERRO", error: error.message });
     }
