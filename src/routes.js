@@ -16,6 +16,8 @@ const CategoryPricesController = require("./Controllers/CategoryPricesController
 const CategoryPricesValidator = require("./Validators/CategoryPricesValidator");
 const CategoryProfessionController = require("./Controllers/CategoryProfessionController");
 const CategoryProfessionValidator = require("./Validators/CategoryProfessionValidator");
+const AvaliationValidator = require("./Validators/AvaliationValidator");
+const AvaliationController = require("./Controllers/AvaliationController");
 
 const routes = Router();
 
@@ -159,5 +161,25 @@ routes.put(
   CategoryProfessionValidator.update,
   CategoryProfessionController.update
 );
+
+//Avaliation
+routes.post(
+  "/avaliation",
+  AvaliationValidator.create,
+  AvaliationController.create
+);
+routes.get("/avaliation", AvaliationValidator.read, AvaliationController.read);
+routes.delete(
+  "/avaliation/:id",
+  AvaliationValidator.destroy,
+  AvaliationController.destroy
+);
+routes.put(
+  "/avaliation/:id",
+  AvaliationValidator.update,
+  AvaliationController.update
+);
+routes.get("/avaliation/:iaId", AvaliationController.getByIaId);
+routes.delete("/avaliation", AvaliationController.destroyAll);
 
 module.exports = routes;
