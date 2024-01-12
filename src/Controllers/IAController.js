@@ -8,16 +8,15 @@ class IAController {
   async create(req, res) {
     try {
       const IA = await IAModel.create(req.body);
-
-        //Embeds youtube url
-        if (!IA.youtubeVideoLink.includes("/embed")) {
-          IA.youtubeVideoLink = IA.youtubeVideoLink.replace("watch?v=", "embed/");
-          await IA.save()
-        }
-
+      if (!IA.youtubeVideoLink.includes("/embed")) {
+        IA.youtubeVideoLink = IA.youtubeVideoLink.replace("watch?v=", "embed/");
+        await IA.save();
+      }
       return res.status(200).json(IA);
     } catch (error) {
-      res.status(500).json({ message: "ERROR", error: error.message });
+      res
+        .status(500)
+        .json({ message: "Error while createing an AI", error: error.message });
     }
   }
 
