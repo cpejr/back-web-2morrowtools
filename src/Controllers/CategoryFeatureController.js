@@ -1,4 +1,6 @@
+const IAController = require("./IAController");
 const CategoryModel = require("../Models/CategoryFeatureModel");
+const IAModel = require("../Models/IAModel");
 class CategoryController {
   async create(req, res) {
     try {
@@ -15,6 +17,35 @@ class CategoryController {
       return res.status(200).json(category);
     } catch (error) {
       res.status(500).json({ message: "ERROR", error: error.message });
+    }
+  }
+
+  async readByName(req, res) {
+    try {
+      const name = req?.query?.name;
+      const regexName = new RegExp(name, "i");
+      const categoryFeature = await CategoryModel.find({
+        name: regexName,
+      }).sort("name");
+      return res.status(200).json(categoryFeature);
+    } catch (error) {
+      return res.status(500).json({
+        message: "Erro while fetching CategoryFeature by name",
+        error: error.message,
+      });
+    }
+  }
+
+  async readNames(req, res) {
+    try {
+      const names = await CategoryModel.find({}, { name: 1 });
+      const namesArray = names.map((ia) => ia.name);
+      return res.status(200).json(namesArray);
+    } catch (error) {
+      res.status(500).json({
+        message: "Error while fetching CategoryFeature names",
+        error: error.message,
+      });
     }
   }
 
@@ -48,5 +79,4 @@ class CategoryController {
     }
   }
 }
-
 module.exports = new CategoryController();
