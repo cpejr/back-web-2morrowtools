@@ -12,26 +12,25 @@ class CommentController {
   }
 
   async read(req, res) {
-    console.log(req.params);
     const { id_ia } = req.params;
-    console.log(id_ia);
     const comments = await CommentModel.find({ id_ia });
-    console.log(comments);
     return res.status(200).json(comments);
   }
 
   async destroy(req, res) {
     try {
-      console.log(req.body);
-      console.log(req.params);
       const { id } = req.params;
+      const { user } = req.body;
+      console.log(user);
+      console.log(user._id);
+      console.log(user.type);
       const foundComment = await CommentModel.findById(id);
       if (!foundComment) {
         return res.status(404).json({ message: "Comment not found!" });
       }
       if (
-        req.body.id_user_makingChange !== foundComment.id_user.toString() &&
-        req.body.type_user_makingChange !== "Admin"
+        user._id !== foundComment.id_user.toString() &&
+        user.type !== "Admin"
       ) {
         return res
           .status(401)
