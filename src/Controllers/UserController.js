@@ -1,15 +1,20 @@
-const express = require("express");
-const { json } = express;
 const UserModel = require("../Models/UserModel");
 const jwt = require("jsonwebtoken");
+const {
+  setCurrentUserEmail,
+  setCurrentUserToken,
+} = require("../Utils/globalVariables");
 
 class UserController {
   async create(req, res) {
     try {
-      let userFound = await UserModel.findOne({ email: req.body.email });
+      const userFound = await UserModel.findOne({ email: req.body.email });
 
       if (!userFound) {
-        userFound = await UserModel.create(req.body);
+        const userFound = await UserModel.create(req.body);
+
+        //const { password, ...userWithoutPassword } = User.toObject()
+
         await userFound.save();
       }
 
@@ -21,7 +26,10 @@ class UserController {
         { expiresIn: process.env.JWT_EXPIRE_IN }
       );
 
-      return res.status(200).json({ token, userFound });
+      setCurrentUserEmail(req.body.email);
+      setCurrentUserToken(token);
+
+      return res.status(200).json({ token });
     } catch (error) {
       res.status(500).json({ message: "ERRO", error: error.message });
     }
@@ -30,7 +38,9 @@ class UserController {
   async read(req, res) {
     try {
       const { id } = req.params;
+
       const User = await UserModel.findById(id);
+
       res.status(200).json(User);
     } catch (error) {
       res.status(500).json({ message: "ERRO", error: error.message });
