@@ -30,9 +30,7 @@ class UserController {
   async read(req, res) {
     try {
       const { id } = req.params;
-
       const User = await UserModel.findById(id);
-
       res.status(200).json(User);
     } catch (error) {
       res.status(500).json({ message: "ERRO", error: error.message });

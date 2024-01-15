@@ -21,9 +21,6 @@ class CommentController {
     try {
       const { id } = req.params;
       const { user } = req.body;
-      console.log(user);
-      console.log(user._id);
-      console.log(user.type);
       const foundComment = await CommentModel.findById(id);
       if (!foundComment) {
         return res.status(404).json({ message: "Comment not found!" });

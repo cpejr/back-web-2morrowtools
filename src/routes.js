@@ -65,35 +65,15 @@ routes.put(
 
 //Favorites
 routes.post("/Favorite", FavoriteValidator.create, FavoriteController.create);
-routes.get(
-  "/Favorite/:userId?",
-  FavoriteValidator.read,
-  FavoriteController.read
-);
-routes.delete(
-  "/Favorite/:id",
-  FavoriteValidator.destroy,
-  FavoriteController.destroy
-);
-routes.put(
-  "/Favorite/:id",
-  FavoriteValidator.update,
-  FavoriteController.update
-);
+routes.get("/Favorite/:userId?", FavoriteValidator.read,  FavoriteController.read);
+routes.delete("/Favorite/:id", FavoriteValidator.destroy, FavoriteController.destroy);
+routes.put("/Favorite/:id", FavoriteValidator.update, FavoriteController.update);
 
 //User
 routes.post("/User", UserValidator.create, UserController.create);
 routes.get("/User/:id?", /*verifyJwt, verifyUser,*/ UserController.read);
-routes.delete(
-  "/User/:id",
-  /*verifyJwt, verifyUser,*/ UserValidator.destroy,
-  UserController.destroy
-);
-routes.put(
-  "/User/:id",
-  /*verifyJwt, verifyUser,*/ UserValidator.update,
-  UserController.update
-);
+routes.delete("/User/:id", /*verifyJwt, verifyUser,*/ UserValidator.destroy, UserController.destroy);
+routes.put("/User/:id", /*verifyJwt, verifyUser,*/ UserValidator.update, UserController.update);
 
 //Auth
 routes.post("/login", AuthValidator.login, AuthController.login);
@@ -118,11 +98,8 @@ routes.put(
 // Comment
 routes.post("/comment", CommentValidator.create, CommentController.create);
 routes.get("/comment/:id_ia", CommentController.read);
-routes.delete(
-  "/comment/:id",
-  CommentValidator.destroy,
-  CommentController.destroy
-);
+routes.delete("/comment/:id", CommentValidator.destroy, CommentController.destroy);
 routes.put("/comment/:id", CommentValidator.update, CommentController.update);
+
 
 module.exports = routes;
