@@ -25,13 +25,8 @@ class CommentController {
       if (!foundComment) {
         return res.status(404).json({ message: "Comment not found!" });
       }
-      if (
-        user._id !== foundComment.id_user.toString() &&
-        user.type !== "Admin"
-      ) {
-        return res
-          .status(401)
-          .json({ message: "You are not authorized to delete this comment" });
+      if (user._id !== foundComment.id_user.toString() && user.type !== "Admin") {
+        return res.status(401).json({ message: "You are not authorized to delete this comment" });
       }
       await foundComment.deleteOne();
       res.status(200).json({
@@ -46,15 +41,12 @@ class CommentController {
     try {
       const { id } = req.params;
       const foundComment = await CommentModel.findById(id);
-      if (!foundComment)
-        return res.status(404).json({ message: "Comment not found!" });
+      if (!foundComment) return res.status(404).json({ message: "Comment not found!" });
       if (
         req.body.id_user_makingChange !== foundComment.id_user.toString() &&
         req.body.type_user_makingChange !== "Admin"
       ) {
-        return res
-          .status(401)
-          .json({ message: "You are not authorized to change this comment" });
+        return res.status(401).json({ message: "You are not authorized to change this comment" });
       }
       const Comment = await foundComment.set(req.body).save();
       res.status(200).json(Comment);
