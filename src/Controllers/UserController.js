@@ -1,9 +1,7 @@
 const UserModel = require("../Models/UserModel");
 const jwt = require("jsonwebtoken");
-const {
-  setCurrentUserEmail,
-  setCurrentUserToken,
-} = require("../Utils/globalVariables");
+const { setCurrentUserEmail, setCurrentUserToken } = require("../Utils/globalVariables");
+const { takeFile, sendFile } = require("../config/azureBlobStorage");
 
 class UserController {
   async create(req, res) {
@@ -12,8 +10,6 @@ class UserController {
 
       if (!userFound) {
         const userFound = await UserModel.create(req.body);
-
-        //const { password, ...userWithoutPassword } = User.toObject()
 
         await userFound.save();
       }
@@ -53,9 +49,7 @@ class UserController {
 
       const userFound = await UserModel.findById(id);
       if (!userFound) {
-        return res
-          .status(404)
-          .json({ message: "Usuário com id " + id + " não encontrado!" });
+        return res.status(404).json({ message: "Usuário com id " + id + " não encontrado!" });
       }
       await userFound.deleteOne();
       res.status(200).json({
@@ -71,46 +65,12 @@ class UserController {
       const { id } = req.params;
       const userFound = await UserModel.findById(id);
       if (!userFound)
-        return res
-          .status(404)
-          .json({ message: "Usuário com id " + id + " não encontrado!" });
+        return res.status(404).json({ message: "Usuário com id " + id + " não encontrado!" });
       const User = await userFound.set(req.body).save();
       res.status(200).json(User);
     } catch (error) {
       res.status(500).json({ message: "ERRO", error: error.message });
     }
-  }
-}
-
-module.exports = new UserController();
-
-const { takeFile, sendFile } = require("../config/azureBlobStorage");
-
-class UserController {
-  async create(req, res) {
-    try {
-      const users = await userModel.create(req.body);
-
-      const { senha, ...newUser } = users.toObject();
-
-      return res.status(200).json({ message: "Usuário cadastrado com sucesso!", users });
-    } catch (error) {
-      res.status(500).json({ message: "Erro!!", error: error.message });
-    }
-  }
-
-  async read(req, res) {
-    const users = await userModel.find();
-
-    return res.status(200).json(users);
-  }
-
-  async readById(req, res) {
-    const { id } = req.params;
-
-    const user = await userModel.findById(id);
-
-    return res.status(200).json(user);
   }
 
   async updateImage(req, res) {
@@ -152,24 +112,6 @@ class UserController {
     const imagem = JSON.parse(result);
 
     return res.status(200).json(imagem);
-  }
-
-  async update(req, res) {
-    const { id } = req.params;
-
-    const user = await userModel.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
-
-    return res.status(200).json(user);
-  }
-
-  async destroy(req, res) {
-    const { id } = req.params;
-
-    const user = await userModel.findByIdAndDelete(id);
-
-    return res.status(200).json(user);
   }
 
   async main() {

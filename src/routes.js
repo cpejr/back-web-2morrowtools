@@ -20,7 +20,6 @@ const CommentValidator = require("./Validators/CommentValidator");
 const CommentController = require("./Controllers/CommentController");
 const AvaliationValidator = require("./Validators/AvaliationValidator");
 const AvaliationController = require("./Controllers/AvaliationController");
-const UserController = require("./Controllers/UserController");
 
 const routes = Router();
 
@@ -42,6 +41,7 @@ routes.put(
   UserValidator.update,
   UserController.update
 );
+routes.get("/userImage/:id", UserController.takeImage);
 
 // Auth
 
@@ -54,13 +54,10 @@ routes.get("/IA/search-by-category", IAController.filterCategories);
 routes.get("/IA/search-by-name", IAController.readByName);
 routes.get("/IA/names", IAController.getAllNames);
 routes.get("/IA/:id?", IAController.read);
-routes.delete(
-  "/IA/:id",
-  verifyIsAdm,
-  IAValidator.destroy,
-  IAController.destroy
-);
+routes.delete("/IA/:id", verifyIsAdm, IAValidator.destroy, IAController.destroy);
 routes.put("/IA/:id", verifyIsAdm, IAValidator.update, IAController.update);
+routes.get("/IAImage/:id", IAValidator.takeIAImage, IAController.takeIAImage);
+routes.put("/IAImage/:id", IAValidator.updateIAImage, IAController.updateIAImage);
 
 // CategoryFeature
 
@@ -71,10 +68,7 @@ routes.post(
   CategoryFeatureController.create
 );
 routes.get("/categoriesfeature", CategoryFeatureController.read);
-routes.get(
-  "/categoriesfeature/search-by-name",
-  CategoryFeatureController.readByName
-);
+routes.get("/categoriesfeature/search-by-name", CategoryFeatureController.readByName);
 routes.get("/categoriesfeature/names", CategoryFeatureController.readNames);
 routes.delete(
   "/categoriesfeature/:id",
@@ -97,10 +91,7 @@ routes.post(
   CategoryPricesValidator.create,
   CategoryPricesController.create
 );
-routes.get(
-  "/categoriesprices/search-by-name",
-  CategoryPricesController.readByName
-);
+routes.get("/categoriesprices/search-by-name", CategoryPricesController.readByName);
 routes.get("/categoriesprices/names", CategoryPricesController.readNames);
 routes.get("/categoriesprices", CategoryPricesController.read);
 routes.delete(
@@ -119,21 +110,9 @@ routes.put(
 //Favorites
 
 routes.post("/Favorite", FavoriteValidator.create, FavoriteController.create);
-routes.get(
-  "/Favorite/:userId?",
-  FavoriteValidator.read,
-  FavoriteController.read
-);
-routes.delete(
-  "/Favorite/:id",
-  FavoriteValidator.destroy,
-  FavoriteController.destroy
-);
-routes.put(
-  "/Favorite/:id",
-  FavoriteValidator.update,
-  FavoriteController.update
-);
+routes.get("/Favorite/:userId?", FavoriteValidator.read, FavoriteController.read);
+routes.delete("/Favorite/:id", FavoriteValidator.destroy, FavoriteController.destroy);
+routes.put("/Favorite/:id", FavoriteValidator.update, FavoriteController.update);
 
 // CategoryProfession
 
@@ -143,14 +122,8 @@ routes.post(
   CategoryProfessionValidator.create,
   CategoryProfessionController.create
 );
-routes.get(
-  "/categoriesprofession/search-by-name",
-  CategoryProfessionController.readByName
-);
-routes.get(
-  "/categoriesprofession/names",
-  CategoryProfessionController.readNames
-);
+routes.get("/categoriesprofession/search-by-name", CategoryProfessionController.readByName);
+routes.get("/categoriesprofession/names", CategoryProfessionController.readNames);
 routes.get("/categoriesprofession", CategoryProfessionController.read);
 routes.delete(
   "/categoriesprofession/:id",
@@ -171,22 +144,10 @@ routes.delete("/comment/:id", CommentValidator.destroy, CommentController.destro
 routes.put("/comment/:id", CommentValidator.update, CommentController.update);
 
 //Avaliation
-routes.post(
-  "/avaliation",
-  AvaliationValidator.create,
-  AvaliationController.create
-);
+routes.post("/avaliation", AvaliationValidator.create, AvaliationController.create);
 routes.get("/avaliation", AvaliationValidator.read, AvaliationController.read);
-routes.delete(
-  "/avaliation/:id",
-  AvaliationValidator.destroy,
-  AvaliationController.destroy
-);
-routes.put(
-  "/avaliation/:id",
-  AvaliationValidator.update,
-  AvaliationController.update
-);
+routes.delete("/avaliation/:id", AvaliationValidator.destroy, AvaliationController.destroy);
+routes.put("/avaliation/:id", AvaliationValidator.update, AvaliationController.update);
 routes.get("/avaliation/:iaId", AvaliationController.getByIaId);
 routes.delete("/avaliation", AvaliationController.destroyAll);
 
