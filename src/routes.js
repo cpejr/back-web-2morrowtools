@@ -16,6 +16,8 @@ const CategoryPricesController = require("./Controllers/CategoryPricesController
 const CategoryPricesValidator = require("./Validators/CategoryPricesValidator");
 const CategoryProfessionController = require("./Controllers/CategoryProfessionController");
 const CategoryProfessionValidator = require("./Validators/CategoryProfessionValidator");
+const CommentValidator = require("./Validators/CommentValidator");
+const CommentController = require("./Controllers/CommentController");
 const AvaliationValidator = require("./Validators/AvaliationValidator");
 const AvaliationController = require("./Controllers/AvaliationController");
 
@@ -161,6 +163,11 @@ routes.put(
   CategoryProfessionValidator.update,
   CategoryProfessionController.update
 );
+// Comment
+routes.post("/comment", CommentValidator.create, CommentController.create);
+routes.get("/comment/:id_ia", CommentController.read);
+routes.delete("/comment/:id", CommentValidator.destroy, CommentController.destroy);
+routes.put("/comment/:id", CommentValidator.update, CommentController.update);
 
 //Avaliation
 routes.post(
