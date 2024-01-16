@@ -14,6 +14,13 @@ const CategoryPricesSchema = new mongoose.Schema(
   }
 );
 
+CategoryPricesSchema.virtual("IA", {
+  ref: "IA",
+  localField: "_id",
+  foreignField: "id_categoryprice",
+  options: { lean: true },
+});
+
 const CategoryPricesModel = mongoose.model(
   "categoriesprices",
   CategoryPricesSchema

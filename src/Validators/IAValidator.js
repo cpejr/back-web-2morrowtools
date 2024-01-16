@@ -14,14 +14,14 @@ const create = validateRequest({
       .min(2, {
         message: "Short description must be at least 2 characters long",
       })
-      .max(60, { message: "Short description cannot exceed 60 characters" }),
+      .max(100, { message: "Short description cannot exceed 60 characters" }),
 
     longDescription: z
       .string({ required_error: "The description is required" })
       .min(20, {
         message: "Large description must be at least 20 characters long",
       })
-      .max(500, { message: "Large description cannot exceed 500 characters" }),
+      .max(750, { message: "Large description cannot exceed 500 characters" }),
     youtubeVideoLink: z
       .string()
       .min(5, {
@@ -93,9 +93,14 @@ const create = validateRequest({
       .optional(),
     imageURL: z.string({ required_error: "The image URL is required" }),
     link: z.string({ required_error: "The link is required" }),
-    priceType: z.string({ required_error: "The price type is required" }),
-    id_categoryfeature: z.custom(mongoose.isValidObjectId, "The category feature ID is not valid"),
-    id_categoryprice: z.custom(mongoose.isValidObjectId, "The category price ID is not valid"),
+    id_categoryfeature: z.custom(
+      mongoose.isValidObjectId,
+      "The category feature ID is not valid"
+    ),
+    id_categoryprice: z.custom(
+      mongoose.isValidObjectId,
+      "The category price ID is not valid"
+    ),
 
     id_categoryprofession: z.custom(
       mongoose.isValidObjectId,
@@ -123,14 +128,14 @@ const update = validateRequest({
       .min(2, {
         message: "Short description must be at least 2 characters long",
       })
-      .max(60, { message: "Short description cannot exceed 60 characters" })
+      .max(100, { message: "Short description cannot exceed 60 characters" })
       .optional(),
     longDescription: z
       .string()
       .min(20, {
         message: "Long description must be at least 20 characters long",
       })
-      .max(500, { message: "Long description cannot exceed 500 characters" })
+      .max(750, { message: "Long description cannot exceed 500 characters" })
       .optional(),
     youtubeVideoLink: z
       .string()
@@ -204,9 +209,14 @@ const update = validateRequest({
 
     imageURL: z.string().optional(),
     link: z.string().optional(),
-    priceType: z.string().optional(),
-    id_categoryfeature: z.custom(mongoose.isValidObjectId, "The category feature ID is not valid"),
-    id_categoryprice: z.custom(mongoose.isValidObjectId, "The category price ID is not valid"),
+    id_categoryfeature: z.custom(
+      mongoose.isValidObjectId,
+      "The category feature ID is not valid"
+    ),
+    id_categoryprice: z.custom(
+      mongoose.isValidObjectId,
+      "The category price ID is not valid"
+    ),
     id_categoryprofession: z.custom(
       mongoose.isValidObjectId,
       "The category profession ID is not valid"

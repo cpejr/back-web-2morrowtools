@@ -14,6 +14,13 @@ const CategoryFeatureSchema = new mongoose.Schema(
   }
 );
 
+CategoryFeatureSchema.virtual("IA", {
+  ref: "IA",
+  localField: "_id",
+  foreignField: "id_categoryfeature",
+  options: { lean: true },
+});
+
 const CategoryModel = mongoose.model(
   "categoriesfeature",
   CategoryFeatureSchema

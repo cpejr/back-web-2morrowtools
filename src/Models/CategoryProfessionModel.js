@@ -14,6 +14,13 @@ const CategoryProfessionSchema = new mongoose.Schema(
   }
 );
 
+CategoryProfessionSchema.virtual("IA", {
+  ref: "IA",
+  localField: "_id",
+  foreignField: "id_categoryprofession",
+  options: { lean: true },
+});
+
 const CategoryProfessionModel = mongoose.model(
   "categoriesprofession",
   CategoryProfessionSchema

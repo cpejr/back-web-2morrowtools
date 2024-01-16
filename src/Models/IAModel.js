@@ -45,11 +45,6 @@ const IASchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    priceType: {
-      type: String,
-      required: true,
-      trim: true,
-    },
     youtubeVideoLink: {
       type: String,
       trim: true,
