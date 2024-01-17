@@ -3,6 +3,7 @@ const convertStringToRegexp = require("../Utils/ConvertStringtoRegexp.js");
 const CategoryPricesModel = require("../Models/CategoryPricesModel.js");
 const CategoryProfessionModel = require("../Models/CategoryProfessionModel.js");
 const CategoryModel = require("../Models/CategoryFeatureModel.js");
+const AvaliationModel = require("../Models/AvaliationModel.js");
 
 class IAController {
   async create(req, res) {
@@ -83,7 +84,7 @@ class IAController {
   async filterCategories(req, res) {
     try {
       let idsArray = [];
-      const { id, name } = req.query;
+      const { id, name, type } = req.query;
 
       if (id) {
         idsArray = id.split(",");
@@ -92,7 +93,10 @@ class IAController {
       let tools = [];
 
       if (idsArray.length === 0) {
-        tools = await IAModel.find();
+        tools = await IAModel.find()
+          .populate("id_categoryfeature")
+          .populate("id_categoryprice")
+          .populate("id_categoryprofession");
       } else {
         tools = await IAModel.find({
           $or: [
@@ -100,24 +104,54 @@ class IAController {
             { id_categoryprofession: { $in: idsArray } },
             { id_categoryfeature: { $in: idsArray } },
           ],
-        });
+        })
+          .populate("id_categoryfeature")
+          .populate("id_categoryprice")
+          .populate("id_categoryprofession");
       }
 
       if (name) {
         const regexName = new RegExp(name, "i");
         tools = tools.filter((tool) => regexName.test(tool.name));
       }
+      switch (type) {
+        case "name":
+          const OrderedTools = tools.sort((a, b) => {
+            if (a.name < b.name) {
+              return -1;
+            }
+            if (a.name > b.name) {
+              return 1;
+            }
+            return 0;
+          });
 
-      const uniqueTools = Array.from(new Set(tools.map((tool) => tool.id)));
+          tools = OrderedTools;
 
-      const uniqueToolObjects = await IAModel.find({
-        _id: { $in: uniqueTools },
-      })
-        .populate("id_categoryfeature")
-        .populate("id_categoryprice")
-        .populate("id_categoryprofession");
+          break;
 
-      return res.status(200).json(uniqueToolObjects);
+        case "date":
+          break;
+
+        case "avaliation":
+          const avaliationTools = await AvaliationModel.find();
+          break;
+      }
+      const uniqueToolObjects = () => {
+        const mapIds = new Map();
+        const UniqueArray = [];
+
+        tools.forEach((obj) => {
+          if (!mapIds.has(obj._id)) {
+            mapIds.set(obj._id, true);
+            UniqueArray.push(obj);
+          }
+        });
+        return UniqueArray;
+      };
+      console.log("✌️uniqueToolObjects --->", uniqueToolObjects());
+
+      return res.status(200).json(uniqueToolObjects());
     } catch (error) {
       res.status(500).json({ message: "ERROR", error: error.message });
     }
