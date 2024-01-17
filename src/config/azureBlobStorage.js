@@ -57,21 +57,23 @@ async function takeFile(key) {
   return buffer;
 }
 
-async function sendFile({ file, ACL }) {
+async function sendFile({ imageURL }) {
   const containerClient = blobServiceClient.getContainerClient(
     process.env.AZURE_STORAGE_CONTAINER_NAME
   );
 
   const key = randomFileName("") + ".json";
-  const blobClient = containerClient.getBlobClient(key);
+  const blobClient = containerClient.getBlockBlobClient(key);
 
-  const uploadResponse = await blobClient.upload(file, file.length, {
-    blobHTTPHeaders: { blobContentType: "application/json" },
-    metadata: { key: key },
-  });
+  // Use uploadData instead of upload
+  const uploadResponse = await blobClient.upload(imageURL, imageURL.length);
 
   return { key, ...uploadResponse._response.parsedBody };
 }
+// {
+//     blobHTTPHeaders: { blobContentType: "application/json" },
+//     metadata: { key: key },
+//   }
 
 async function sendFiles({ files, ACL }) {
   return Promise.all(files.map(async (file) => sendFile({ file, ACL })));

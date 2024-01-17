@@ -25,6 +25,15 @@ class UserController {
       setCurrentUserEmail(req.body.email);
       setCurrentUserToken(token);
 
+      const { imageURL } = req.body;
+
+      const { key } = await sendFile({
+        imageURL,
+        ACL: "public-read	",
+      });
+      user.set({ imageURL: key }); // O upload file não retorna uma url
+      await user.save();
+
       return res.status(200).json({ token });
     } catch (error) {
       res.status(500).json({ message: "ERRO", error: error.message });
