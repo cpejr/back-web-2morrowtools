@@ -131,10 +131,63 @@ class IAController {
           break;
 
         case "date":
+          const OrderedTime = tools.reverse();
+          tools = OrderedTime;
           break;
 
         case "avaliation":
-          const avaliationTools = await AvaliationModel.find();
+          const starsTools = await AvaliationModel.find();
+          console.log("✌️starsTools --->", starsTools);
+
+          const sums = {};
+          const counts = {};
+
+          starsTools.forEach((obj) => {
+            const { iaId, rate } = obj;
+
+            if (!sums[iaId]) {
+              sums[iaId] = 0;
+              counts[iaId] = 0;
+            }
+
+            sums[iaId] += rate;
+            counts[iaId]++;
+          });
+
+          const averages = {};
+          Object.keys(sums).forEach((iaId) => {
+            averages[iaId] = sums[iaId] / counts[iaId];
+          });
+
+          const averagesArray = Object.entries(averages).map(
+            ([iaId, rate]) => ({
+              iaId: iaId,
+              rate: rate,
+            })
+          );
+
+          averagesArray.sort((a, b) => b.rate - a.rate);
+
+          const OrderedStar = tools.sort((a, b) => {
+            const id_a = a._id;
+            const id_b = b._id;
+
+            const indexA = averagesArray.findIndex(
+              (entry) => entry.iaId == id_a
+            );
+            const indexB = averagesArray.findIndex(
+              (entry) => entry.iaId == id_b
+            );
+            if (indexA == -1 && indexB == -1) {
+              return 0;
+            } else if (indexA == -1) {
+              return 1;
+            } else if (indexB == -1) {
+              return -1;
+            }
+            return indexA - indexB;
+          });
+          tools = OrderedStar;
           break;
       }
       const uniqueToolObjects = () => {
@@ -149,7 +202,6 @@ class IAController {
         });
         return UniqueArray;
       };
-      console.log("✌️uniqueToolObjects --->", uniqueToolObjects());
 
       return res.status(200).json(uniqueToolObjects());
     } catch (error) {
