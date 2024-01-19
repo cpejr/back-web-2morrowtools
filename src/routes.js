@@ -29,18 +29,10 @@ routes.post("/User", UserValidator.create, UserController.create);
 routes.get("/User/:id?", UserController.read);
 routes.delete(
   "/User/:id",
-  // verifyJwt,
-  // verifyUser,
-  UserValidator.destroy,
+  /*verifyJwt, verifyUser,*/ UserValidator.destroy,
   UserController.destroy
 );
-routes.put(
-  "/User/:id",
-  // verifyJwt,
-  // verifyUser,
-  UserValidator.update,
-  UserController.update
-);
+routes.put("/User/:id", /*verifyJwt, verifyUser,*/ UserValidator.update, UserController.update);
 routes.get("/userImage/:id", UserController.takeImage);
 
 // Auth
@@ -49,13 +41,13 @@ routes.post("/login", AuthValidator.login, AuthController.login);
 
 // IAs
 
-routes.post("/IA", /*verifyIsAdm,*/ IAValidator.create, IAController.create);
+routes.post("/IA", verifyIsAdm, IAValidator.create, IAController.create);
 routes.get("/IA/search-by-category", IAController.filterCategories);
 routes.get("/IA/search-by-name", IAController.readByName);
 routes.get("/IA/names", IAController.getAllNames);
 routes.get("/IA/:id?", IAController.read);
-routes.delete("/IA/:id", /*verifyIsAdm,*/ IAValidator.destroy, IAController.destroy);
-routes.put("/IA/:id", /*verifyIsAdm,*/ IAValidator.update, IAController.update);
+routes.delete("/IA/:id", verifyIsAdm, IAValidator.destroy, IAController.destroy);
+routes.put("/IA/:id", verifyIsAdm, IAValidator.update, IAController.update);
 
 // CategoryFeature
 
