@@ -93,14 +93,8 @@ const create = validateRequest({
       .optional(),
     imageURL: z.string({ required_error: "The image URL is required" }),
     link: z.string({ required_error: "The link is required" }),
-    id_categoryfeature: z.custom(
-      mongoose.isValidObjectId,
-      "The category feature ID is not valid"
-    ),
-    id_categoryprice: z.custom(
-      mongoose.isValidObjectId,
-      "The category price ID is not valid"
-    ),
+    id_categoryfeature: z.custom(mongoose.isValidObjectId, "The category feature ID is not valid"),
+    id_categoryprice: z.custom(mongoose.isValidObjectId, "The category price ID is not valid"),
 
     id_categoryprofession: z.custom(
       mongoose.isValidObjectId,
@@ -209,18 +203,15 @@ const update = validateRequest({
 
     imageURL: z.string().optional(),
     link: z.string().optional(),
-    id_categoryfeature: z.custom(
-      mongoose.isValidObjectId,
-      "The category feature ID is not valid"
-    ),
-    id_categoryprice: z.custom(
-      mongoose.isValidObjectId,
-      "The category price ID is not valid"
-    ),
-    id_categoryprofession: z.custom(
-      mongoose.isValidObjectId,
-      "The category profession ID is not valid"
-    ),
+    id_categoryfeature: z
+      .custom(mongoose.isValidObjectId, "The category feature ID is not valid")
+      .optional(),
+    id_categoryprice: z
+      .custom(mongoose.isValidObjectId, "The category price ID is not valid")
+      .optional(),
+    id_categoryprofession: z
+      .custom(mongoose.isValidObjectId, "The category profession ID is not valid")
+      .optional(),
   }),
 
   params: z.object({
