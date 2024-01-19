@@ -1,16 +1,19 @@
 const UserModel = require("../Models/UserModel");
 const jwt = require("jsonwebtoken");
 const { setCurrentUserEmail, setCurrentUserToken } = require("../Utils/globalVariables");
-const { takeFile, sendFile } = require("../config/azureBlobStorage");
+const { uploadImage } = require("../config/blobStorage");
 
 class UserController {
   async create(req, res) {
     try {
-      const userFound = await UserModel.findOne({ email: req.body.email });
+      let userFound = await UserModel.findOne({ email: req.body.email });
 
       if (!userFound) {
-        const userFound = await UserModel.create(req.body);
+        userFound = await UserModel.create({ ...req.body, imageURL: "" });
+        const { imageURL: base64Image, name } = req.body;
 
+        const imageURL = await uploadImage(base64Image, name);
+        userFound.set({ imageURL });
         await userFound.save();
       }
 
@@ -25,16 +28,7 @@ class UserController {
       setCurrentUserEmail(req.body.email);
       setCurrentUserToken(token);
 
-      const { imageURL } = req.body;
-
-      const { key } = await sendFile({
-        imageURL,
-        ACL: "public-read	",
-      });
-      user.set({ imageURL: key }); // O upload file não retorna uma url
-      await user.save();
-
-      return res.status(200).json({ token });
+      return res.status(200).json({ token, user: userFound });
     } catch (error) {
       res.status(500).json({ message: "ERRO", error: error.message });
     }
