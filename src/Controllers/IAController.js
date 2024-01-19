@@ -137,7 +137,6 @@ class IAController {
 
         case "avaliation":
           const starsTools = await AvaliationModel.find();
-          console.log("✌️starsTools --->", starsTools);
 
           const sums = {};
           const counts = {};
@@ -193,7 +192,6 @@ class IAController {
       const uniqueToolObjects = () => {
         const mapIds = new Map();
         const UniqueArray = [];
-
         tools.forEach((obj) => {
           if (!mapIds.has(obj._id)) {
             mapIds.set(obj._id, true);
