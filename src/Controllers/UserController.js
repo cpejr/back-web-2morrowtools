@@ -6,14 +6,12 @@ const { uploadImage } = require("../config/blobStorage");
 class UserController {
   async create(req, res) {
     try {
+      console.log(req.body);
       let userFound = await UserModel.findOne({ email: req.body.email });
 
       if (!userFound) {
         userFound = await UserModel.create({ ...req.body, imageURL: "" });
-        const { imageURL: base64Image, name } = req.body;
 
-        const imageURL = await uploadImage(base64Image, name);
-        userFound.set({ imageURL });
         await userFound.save();
       }
 
