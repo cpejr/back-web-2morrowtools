@@ -41,13 +41,14 @@ routes.post("/login", AuthValidator.login, AuthController.login);
 
 // IAs
 
-routes.post("/IA", verifyIsAdm, IAValidator.create, IAController.create);
+routes.post("/IA", /*verifyIsAdm,*/ IAValidator.create, IAController.create);
 routes.get("/IA/search-by-category", IAController.filterCategories);
 routes.get("/IA/search-by-name", IAController.readByName);
 routes.get("/IA/names", IAController.getAllNames);
 routes.get("/IA/:id?", IAController.read);
 routes.delete("/IA/:id", verifyIsAdm, IAValidator.destroy, IAController.destroy);
 routes.put("/IA/:id", verifyIsAdm, IAValidator.update, IAController.update);
+routes.post("/IAImage", IAValidator.readImage, IAController.readImage);
 
 // CategoryFeature
 

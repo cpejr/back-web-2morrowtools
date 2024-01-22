@@ -219,14 +219,9 @@ const update = validateRequest({
   }),
 });
 
-const updateIAImage = validateRequest({
-  params: z.object({
-    id: z.custom(mongoose.isValidObjectId, "O ID não é válido"), //se o id não for válido, ele manda a mensagem.
-  }),
-});
-const takeIAImage = validateRequest({
-  params: z.object({
-    id: z.custom(mongoose.isValidObjectId, "O ID não é válido"), //se o id não for válido, ele manda a mensagem.
+const readImage = validateRequest({
+  body: z.object({
+    imageURL: z.string(),
   }),
 });
 
@@ -234,6 +229,5 @@ module.exports = {
   create,
   destroy,
   update,
-  updateIAImage,
-  takeIAImage,
+  readImage,
 };

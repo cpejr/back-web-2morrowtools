@@ -23,7 +23,6 @@ async function deleteImage(image) {
     await blockBlobClient.delete({
       deleteSnapshots: "include",
     });
-    console.log(`Deleted blob ${name}`);
   }
 }
 
@@ -36,7 +35,6 @@ async function uploadImage(image, name) {
   const blockBlobClient = containerClient.getBlockBlobClient(blobName);
   const uploadBlobResponse = await blockBlobClient.upload(image, image.length);
 
-  console.log(`Blob was uploaded successfully. requestId: ${uploadBlobResponse.requestId}`);
   return blockBlobClient?.url;
 }
 
@@ -44,12 +42,39 @@ async function editImage(image, previousImage, name) {
   if (imageExists(previousImage)) await deleteImage(previousImage);
   const imageURL = await uploadImage(image, name);
 
-  console.log(`Blob was uploaded successfully. `);
   return imageURL;
+}
+
+async function getImage(imageURL) {
+  if (imageExists(imageURL)) {
+    const name = imageURL?.split("/images/")[1];
+
+    const containerClient = getContainer();
+    const blobClient = containerClient.getBlobClient(name);
+    const downloadResponse = await blobClient.download();
+
+    const downloaded = await streamToBuffer(downloadResponse.readableStreamBody);
+    return downloaded.toString();
+  }
+  return imageURL;
+}
+
+async function streamToBuffer(readableStream) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    readableStream.on("data", (data) => {
+      chunks.push(data instanceof Buffer ? data : Buffer.from(data));
+    });
+    readableStream.on("end", () => {
+      resolve(Buffer.concat(chunks));
+    });
+    readableStream.on("error", reject);
+  });
 }
 
 module.exports = {
   uploadImage,
   editImage,
   deleteImage,
+  getImage,
 };

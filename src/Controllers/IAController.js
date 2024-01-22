@@ -3,7 +3,7 @@ const convertStringToRegexp = require("../Utils/ConvertStringtoRegexp.js");
 const CategoryPricesModel = require("../Models/CategoryPricesModel.js");
 const CategoryProfessionModel = require("../Models/CategoryProfessionModel.js");
 const CategoryModel = require("../Models/CategoryFeatureModel.js");
-const { uploadImage, editImage, deleteImage } = require("../config/blobStorage");
+const { uploadImage, editImage, deleteImage, getImage } = require("../config/blobStorage");
 
 class IAController {
   async create(req, res) {
@@ -165,6 +165,17 @@ class IAController {
       return res.status(200).json(IA);
     } catch (error) {
       res.status(500).json({ message: "ERROR", error: error.message });
+    }
+  }
+
+  async readImage(req, res) {
+    try {
+      const { imageURL } = req.body;
+
+      const image = await getImage(imageURL);
+      return res.status(200).json({ image });
+    } catch (error) {
+      return res.status(500).json({ message: "ERROR", error: error.message });
     }
   }
 }
