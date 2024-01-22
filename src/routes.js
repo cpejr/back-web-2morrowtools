@@ -166,7 +166,11 @@ routes.put(
 // Comment
 routes.post("/comment", CommentValidator.create, CommentController.create);
 routes.get("/comment/:id_ia", CommentController.read);
-routes.delete("/comment/:id", CommentValidator.destroy, CommentController.destroy);
+routes.delete(
+  "/comment/:id",
+  CommentValidator.destroy,
+  CommentController.destroy
+);
 routes.put("/comment/:id", CommentValidator.update, CommentController.update);
 
 //Avaliation
@@ -175,6 +179,9 @@ routes.post(
   AvaliationValidator.create,
   AvaliationController.create
 );
+routes.get("/avaliation/ID", AvaliationController.getUserAvaliation);
+routes.get("/avaliation/check/:iaId", AvaliationController.getTrueFalse);
+routes.get("/avaliation/userCheck/:iaId", AvaliationController.getUserHasRated);
 routes.get("/avaliation", AvaliationValidator.read, AvaliationController.read);
 routes.delete(
   "/avaliation/:id",

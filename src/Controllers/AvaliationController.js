@@ -3,10 +3,17 @@ const AvaliationModel = require("../Models/AvaliationModel");
 class AvaliationController {
   async create(req, res) {
     try {
-      const category = await AvaliationModel.create(req.body);
-      return res.status(200).json(category);
+      const { userId, iaId } = req.body;
+      const evaluations = await AvaliationModel.find({ userId, iaId });
+      if (evaluations.length < 1) {
+        const category = await AvaliationModel.create(req.body);
+        return res.status(200).json(category);
+      } else
+        return res
+          .status(500)
+          .json({ message: "User has already rated this IA" });
     } catch (error) {
-      res.status(500).json({ message: "ERROR", error: error.message });
+      res.status(500).json({ message: "ERROR5", error: error.message });
     }
   }
 
@@ -16,6 +23,21 @@ class AvaliationController {
       return res.status(200).json(category);
     } catch (error) {
       res.status(500).json({ message: "ERROR", error: error.message });
+    }
+  }
+
+  async getUserAvaliation(req, res) {
+    try {
+      const { userId, iaId } = req.query;
+      const avaliation = await AvaliationModel.findOne({ userId, iaId });
+      const { _id, rate } = avaliation;
+      let result = {};
+      result = { _id, rate };
+      return res.status(200).json(result);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: "Error while fetching ID", error: error.message });
     }
   }
 
@@ -46,6 +68,37 @@ class AvaliationController {
       res.status(200).json(category);
     } catch (error) {
       res.status(500).json({ message: "ERROR", error: error.message });
+    }
+  }
+
+  async getTrueFalse(req, res) {
+    try {
+      const { iaId } = req.params;
+      const evaluations = await AvaliationModel.find({ iaId });
+      let result = true;
+      if (evaluations.length === 0) result = false;
+      return res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json({
+        message: "Error while fetching IA rating",
+        error: error.message,
+      });
+    }
+  }
+  async getUserHasRated(req, res) {
+    try {
+      let result = true;
+      const { iaId } = req.params;
+      const { userId } = req.query;
+      const evaluations = await AvaliationModel.find({ iaId, userId });
+      if (evaluations.length === 0) result = false;
+
+      return res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json({
+        message: "Error while fetching User ratings",
+        error: error.message,
+      });
     }
   }
 
