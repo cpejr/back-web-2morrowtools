@@ -22,7 +22,7 @@ const UserSchema = new mongoose.Schema({
   },
   imageURL: {
     type: String,
-    required: true,
+    required: false,
     trim: true,
   },
   type: {
@@ -35,15 +35,15 @@ const UserSchema = new mongoose.Schema({
 UserSchema.pre("save", async function (next) {
   const user = this;
 
-  if(user.isModified("password")){
-    const salt = await bcrypt.genSalt()
+  if (user.isModified("password")) {
+    const salt = await bcrypt.genSalt();
     const hash = await bcrypt.hash(user.password, salt);
-  
+
     user.password = hash;
   }
 
-next(); 
-})
+  next();
+});
 
 const UserModel = mongoose.model("User", UserSchema);
 module.exports = UserModel;
