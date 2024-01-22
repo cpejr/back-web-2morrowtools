@@ -25,10 +25,11 @@ const routes = Router();
 
 // User
 
+routes.get("/User/getAll", UserController.readAll);
 routes.post("/User", UserValidator.create, UserController.create);
 routes.get("/User/:id?", UserController.read);
-routes.delete("/User/:id", verifyJwt, verifyUser, UserValidator.destroy, UserController.destroy);
-routes.put("/User/:id", verifyJwt, verifyUser, UserValidator.update, UserController.update);
+routes.delete("/User/:id", UserValidator.destroy, UserController.destroy);
+routes.put("/User/:id", UserValidator.update, UserController.update);
 routes.get("/userImage/:id", UserController.takeImage);
 
 // Auth
@@ -136,19 +137,11 @@ routes.put(
 // Comment
 routes.post("/comment", CommentValidator.create, CommentController.create);
 routes.get("/comment/:id_ia", CommentController.read);
-routes.delete(
-  "/comment/:id",
-  CommentValidator.destroy,
-  CommentController.destroy
-);
+routes.delete("/comment/:id", CommentValidator.destroy, CommentController.destroy);
 routes.put("/comment/:id", CommentValidator.update, CommentController.update);
 
 //Avaliation
-routes.post(
-  "/avaliation",
-  AvaliationValidator.create,
-  AvaliationController.create
-);
+routes.post("/avaliation", AvaliationValidator.create, AvaliationController.create);
 routes.get("/avaliation/ID", AvaliationController.getUserAvaliation);
 routes.get("/avaliation/check/:iaId", AvaliationController.getTrueFalse);
 routes.get("/avaliation/userCheck/:iaId", AvaliationController.getUserHasRated);

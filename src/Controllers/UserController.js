@@ -38,6 +38,15 @@ class UserController {
     }
   }
 
+  async readAll(req, res) {
+    try {
+      const User = await UserModel.find();
+      res.status(200).json(User);
+    } catch (error) {
+      res.status(500).json({ message: "Erro while fethcing Users", error: error.message });
+    }
+  }
+
   async destroy(req, res) {
     try {
       const { id } = req.params;
