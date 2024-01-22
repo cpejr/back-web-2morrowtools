@@ -125,9 +125,7 @@ class IAController {
             }
             return 0;
           });
-
           tools = OrderedTools;
-
           break;
 
         case "date":
@@ -137,7 +135,6 @@ class IAController {
 
         case "avaliation":
           const starsTools = await AvaliationModel.find();
-
           const sums = {};
           const counts = {};
 
@@ -152,25 +149,20 @@ class IAController {
             sums[iaId] += rate;
             counts[iaId]++;
           });
-
           const averages = {};
           Object.keys(sums).forEach((iaId) => {
             averages[iaId] = sums[iaId] / counts[iaId];
           });
-
           const averagesArray = Object.entries(averages).map(
             ([iaId, rate]) => ({
               iaId: iaId,
               rate: rate,
             })
           );
-
           averagesArray.sort((a, b) => b.rate - a.rate);
-
           const OrderedStar = tools.sort((a, b) => {
             const id_a = a._id;
             const id_b = b._id;
-
             const indexA = averagesArray.findIndex(
               (entry) => entry.iaId == id_a
             );
@@ -186,6 +178,7 @@ class IAController {
             }
             return indexA - indexB;
           });
+
           tools = OrderedStar;
           break;
       }
@@ -201,7 +194,9 @@ class IAController {
         return UniqueArray;
       };
 
-      return res.status(200).json(uniqueToolObjects());
+      const filteredAIs = uniqueToolObjects();
+
+      return res.status(200).json(filteredAIs);
     } catch (error) {
       res.status(500).json({ message: "ERROR", error: error.message });
     }
