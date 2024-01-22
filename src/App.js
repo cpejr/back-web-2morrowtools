@@ -9,9 +9,10 @@ var bodyParser = require("body-parser");
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+const allowedOrigins = process.env.ALLOWED_ORIGINS.split(",");
 app.use(
   cors({
-    origin: ["https://2morrowstorage.blob.core.windows.net", "http://localhost:5173"],
+    origin: allowedOrigins,
   })
 );
 app.use(routes);
