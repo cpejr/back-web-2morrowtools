@@ -3,6 +3,7 @@ const convertStringToRegexp = require("../Utils/ConvertStringtoRegexp.js");
 const CategoryPricesModel = require("../Models/CategoryPricesModel.js");
 const CategoryProfessionModel = require("../Models/CategoryProfessionModel.js");
 const CategoryModel = require("../Models/CategoryFeatureModel.js");
+const AvaliationModel = require("../Models/AvaliationModel.js");
 
 class IAController {
   async create(req, res) {
@@ -83,7 +84,7 @@ class IAController {
   async filterCategories(req, res) {
     try {
       let idsArray = [];
-      const { id, name } = req.query;
+      const { id, name, type } = req.query;
 
       if (id) {
         idsArray = id.split(",");
@@ -92,7 +93,10 @@ class IAController {
       let tools = [];
 
       if (idsArray.length === 0) {
-        tools = await IAModel.find();
+        tools = await IAModel.find()
+          .populate("id_categoryfeature")
+          .populate("id_categoryprice")
+          .populate("id_categoryprofession");
       } else {
         tools = await IAModel.find({
           $or: [
@@ -100,24 +104,99 @@ class IAController {
             { id_categoryprofession: { $in: idsArray } },
             { id_categoryfeature: { $in: idsArray } },
           ],
-        });
+        })
+          .populate("id_categoryfeature")
+          .populate("id_categoryprice")
+          .populate("id_categoryprofession");
       }
 
       if (name) {
         const regexName = new RegExp(name, "i");
         tools = tools.filter((tool) => regexName.test(tool.name));
       }
+      switch (type) {
+        case "name":
+          const OrderedTools = tools.sort((a, b) => {
+            if (a.name < b.name) {
+              return -1;
+            }
+            if (a.name > b.name) {
+              return 1;
+            }
+            return 0;
+          });
+          tools = OrderedTools;
+          break;
 
-      const uniqueTools = Array.from(new Set(tools.map((tool) => tool.id)));
+        case "date":
+          const OrderedTime = tools.reverse();
+          tools = OrderedTime;
+          break;
 
-      const uniqueToolObjects = await IAModel.find({
-        _id: { $in: uniqueTools },
-      })
-        .populate("id_categoryfeature")
-        .populate("id_categoryprice")
-        .populate("id_categoryprofession");
+        case "avaliation":
+          const starsTools = await AvaliationModel.find();
+          const sums = {};
+          const counts = {};
 
-      return res.status(200).json(uniqueToolObjects);
+          starsTools.forEach((obj) => {
+            const { iaId, rate } = obj;
+
+            if (!sums[iaId]) {
+              sums[iaId] = 0;
+              counts[iaId] = 0;
+            }
+
+            sums[iaId] += rate;
+            counts[iaId]++;
+          });
+          const averages = {};
+          Object.keys(sums).forEach((iaId) => {
+            averages[iaId] = sums[iaId] / counts[iaId];
+          });
+          const averagesArray = Object.entries(averages).map(
+            ([iaId, rate]) => ({
+              iaId: iaId,
+              rate: rate,
+            })
+          );
+          averagesArray.sort((a, b) => b.rate - a.rate);
+          const OrderedStar = tools.sort((a, b) => {
+            const id_a = a._id;
+            const id_b = b._id;
+            const indexA = averagesArray.findIndex(
+              (entry) => entry.iaId == id_a
+            );
+            const indexB = averagesArray.findIndex(
+              (entry) => entry.iaId == id_b
+            );
+            if (indexA == -1 && indexB == -1) {
+              return 0;
+            } else if (indexA == -1) {
+              return 1;
+            } else if (indexB == -1) {
+              return -1;
+            }
+            return indexA - indexB;
+          });
+
+          tools = OrderedStar;
+          break;
+      }
+      const uniqueToolObjects = () => {
+        const mapIds = new Map();
+        const UniqueArray = [];
+        tools.forEach((obj) => {
+          if (!mapIds.has(obj._id)) {
+            mapIds.set(obj._id, true);
+            UniqueArray.push(obj);
+          }
+        });
+        return UniqueArray;
+      };
+
+      const filteredAIs = uniqueToolObjects();
+
+      return res.status(200).json(filteredAIs);
     } catch (error) {
       res.status(500).json({ message: "ERROR", error: error.message });
     }
