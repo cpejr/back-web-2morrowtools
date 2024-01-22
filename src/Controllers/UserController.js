@@ -1,7 +1,5 @@
 const UserModel = require("../Models/UserModel");
 const jwt = require("jsonwebtoken");
-const { setCurrentUserEmail, setCurrentUserToken } = require("../Utils/globalVariables");
-const { uploadImage } = require("../config/blobStorage");
 
 class UserController {
   async create(req, res) {
