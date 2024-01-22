@@ -1,9 +1,5 @@
-const { getCurrentUserEmail } = require("../Utils/globalVariables");
-
 function verifyIsAdm(req, res, next) {
-  const userEmail = getCurrentUserEmail();
-
-  if (req.userType === "Admin" || userEmail === process.env.USER_ADM_EMAIL) {
+  if (req?.userType === "Admin") {
     return next();
   }
 

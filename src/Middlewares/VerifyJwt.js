@@ -2,20 +2,15 @@ const jwt = require("jsonwebtoken");
 const { getCurrentUserToken } = require("../Utils/globalVariables");
 
 function verifyJwt(req, res, next) {
-  const currentToken = getCurrentUserToken(); // Login with google --> Firebase
-  const authHeader =
-    req.headers.authorization || req.headers.Authorization || currentToken;
+  const authHeader = req?.headers?.authorization || req?.headers?.Authorization;
+
   if (!authHeader) {
-    return res
-      .status(403)
-      .json({ message: "Header de autorização não encontrado" });
+    return res.status(403).json({ message: "Header de autorização não encontrado" });
   }
   const [bearer, token] = authHeader.split(" ");
 
   if (!/^Bearer$/.test(bearer)) {
-    return res
-      .status(403)
-      .json({ message: "Header de autorização mal formatado" });
+    return res.status(403).json({ message: "Header de autorização mal formatado" });
   }
 
   if (!token) {
@@ -26,9 +21,8 @@ function verifyJwt(req, res, next) {
     if (error) {
       return res.status(403).json({ message: "Jwt token é inválido" });
     }
-
-    req.userId = user.user._id;
-    req.userType = user.user.type;
+    req.userId = user.userFound._id;
+    req.userType = user.userFound.type;
 
     next();
   });
