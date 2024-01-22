@@ -20,9 +20,6 @@ class UserController {
         { expiresIn: process.env.JWT_EXPIRE_IN }
       );
 
-      setCurrentUserEmail(req.body.email);
-      setCurrentUserToken(token);
-
       return res.status(200).json({ token, user: userFound });
     } catch (error) {
       res.status(500).json({ message: "ERRO", error: error.message });
