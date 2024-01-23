@@ -20,6 +20,7 @@ const CommentValidator = require("./Validators/CommentValidator");
 const CommentController = require("./Controllers/CommentController");
 const AvaliationValidator = require("./Validators/AvaliationValidator");
 const AvaliationController = require("./Controllers/AvaliationController");
+const BlogController = require("./Controllers/BlogController");
 
 const routes = Router();
 
@@ -166,7 +167,11 @@ routes.put(
 // Comment
 routes.post("/comment", CommentValidator.create, CommentController.create);
 routes.get("/comment/:id_ia", CommentController.read);
-routes.delete("/comment/:id", CommentValidator.destroy, CommentController.destroy);
+routes.delete(
+  "/comment/:id",
+  CommentValidator.destroy,
+  CommentController.destroy
+);
 routes.put("/comment/:id", CommentValidator.update, CommentController.update);
 
 //Avaliation
@@ -189,4 +194,8 @@ routes.put(
 routes.get("/avaliation/:iaId", AvaliationController.getByIaId);
 routes.delete("/avaliation", AvaliationController.destroyAll);
 
+// Blog
+routes.post("/blog", BlogValidator.create, BlogController.create);
+routes.delete("/blog", BlogController.destroy);
+routes.put("blog", BlogValidator.update, BlogController.update);
 module.exports = routes;
