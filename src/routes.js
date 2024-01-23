@@ -195,7 +195,13 @@ routes.get("/avaliation/:iaId", AvaliationController.getByIaId);
 routes.delete("/avaliation", AvaliationController.destroyAll);
 
 // Blog
-routes.post("/blog", BlogValidator.create, BlogController.create);
-routes.delete("/blog", BlogController.destroy);
-routes.put("blog", BlogValidator.update, BlogController.update);
+routes.post("/blog", verifyIsAdm, BlogValidator.create, BlogController.create);
+routes.delete("/blog/:id", verifyIsAdm, BlogController.destroy);
+routes.put(
+  "/blog/:id",
+  verifyIsAdm,
+  BlogValidator.update,
+  BlogController.update
+);
+routes.get("/blog/:id", verifyIsAdm, BlogController.read);
 module.exports = routes;

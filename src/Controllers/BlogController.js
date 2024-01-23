@@ -6,7 +6,7 @@ class BlogController {
       const blog = await BlogModel.create(req.body);
       return res.status(200);
     } catch (error) {
-      res.status(500).json({ message: "Houve um erro", error: error.message });
+      res.status(500).json({ message: "ERRO", error: error.message });
     }
   }
 
@@ -15,7 +15,7 @@ class BlogController {
       const blog = await BlogModel.read(req.body);
       return res.status(200);
     } catch (error) {
-      res.status(500).json({ message: "Houve um erro", error: error.message });
+      res.status(500).json({ message: "ERRO", error: error.message });
     }
   }
 
@@ -30,7 +30,7 @@ class BlogController {
       await foundBlogPost.deleteOne();
       res.status(200).json({ message: "Tool deleted sucessfully" });
     } catch (error) {
-      res.status(500).json({ message: "ERROR", error: error.message });
+      res.status(500).json({ message: "ERRO", error: error.message });
     }
   }
 
@@ -43,7 +43,7 @@ class BlogController {
       const Blog = await foundBlogPost.set(req.body).save();
       res.status(200).json(Blog);
     } catch (error) {
-      res.status(500).json({ message: "Error", error: error.message });
+      res.status(500).json({ message: "ERRO", error: error.message });
     }
   }
 }
