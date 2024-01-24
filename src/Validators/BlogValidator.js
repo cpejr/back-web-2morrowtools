@@ -8,11 +8,11 @@ const create = validateRequest({
       .string({ required_error: "The post require a name" })
       .min(2, { message: "Name must be at least 2 characters long" }),
     imageUrl: z.string({ required_error: "The Url is required" }),
-    smallDescription: z.string({
-      required_error: "The description is required",
-    }),
-    bigDescription: z.string({ required_error: "The description is required" }),
-  }),
+    shortDescription: z.string({ required_error: "The description is required"}),
+    longDescription: z.string({ required_error: "The description is required" }),
+    id_categoryfeature: z.string( {required_error: "Invalid ID for Category feature"}),  
+    id_categoryprofession: z.string( {required_error: "Invalid ID for Category profession"})
+  })
 });
 
 const destroy = validateRequest({

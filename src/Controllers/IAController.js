@@ -16,7 +16,7 @@ class IAController {
     } catch (error) {
       res
         .status(500)
-        .json({ message: "Error while createing an AI", error: error.message });
+        .json({ message: "Error while creating an AI", error: error.message });
     }
   }
 

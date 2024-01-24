@@ -3,17 +3,34 @@ const Schema = mongoose.Schema;
 
 const BlogSchema = new Schema({
   title: {
-    type: string,
+    type: String,
+    trim: true,
     unique: true,
   },
   imageUrl: {
-    type: string,
+    type: String,
+    required: true,
+    trim: true,
   },
-  smallDescription: {
-    type: string,
+  shortDescription: {
+    type: String,
+    required: true,
+    trim: true,
   },
-  bigDescription: {
-    type: string,
+  longDescription: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  id_categoryprofession: {
+    type: Schema.Types.ObjectId,
+    ref: "categoriesprofession",
+    required: true,
+  },    
+  id_categoryfeature: {
+    type: Schema.Types.ObjectId,
+    ref: "categoriesfeature",
+    required: true,
   },
 });
 
