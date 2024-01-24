@@ -20,6 +20,8 @@ const CommentValidator = require("./Validators/CommentValidator");
 const CommentController = require("./Controllers/CommentController");
 const AvaliationValidator = require("./Validators/AvaliationValidator");
 const AvaliationController = require("./Controllers/AvaliationController");
+const NewsletterController = require("./Controllers/NewsletterController");
+const NewsletterValidator = require("./Validators/NewsletterValidator");
 
 const routes = Router();
 
@@ -150,5 +152,11 @@ routes.delete("/avaliation/:id", AvaliationValidator.destroy, AvaliationControll
 routes.put("/avaliation/:id", AvaliationValidator.update, AvaliationController.update);
 routes.get("/avaliation/:iaId", AvaliationController.getByIaId);
 routes.delete("/avaliation", AvaliationController.destroyAll);
+
+//Newsletter
+routes.post("/newsletter", NewsletterValidator.create, NewsletterController.create);
+routes.get("/newsletter/", NewsletterController.read);
+routes.delete("/newsletter/:id", NewsletterValidator.destroy, NewsletterController.destroy);
+routes.put("/newsletter/:id", NewsletterValidator.update, NewsletterController.update);
 
 module.exports = routes;
