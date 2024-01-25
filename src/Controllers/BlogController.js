@@ -23,9 +23,9 @@ class BlogController {
 
   async getAllNames(req, res) {
     try {
-      const titles = await BlogModel.find({}, { title: 1 });
+      const titles = await BlogModel.find({}, { name: 1 });
 
-      const titlesArray = titles.map((post) => post.title);
+      const titlesArray = titles.map((post) => post.name);
       return res.status(200).json(titlesArray);
     } catch (error) {
       res.status(500).json({
@@ -39,7 +39,7 @@ class BlogController {
     try {
       const { id } = req.params;
 
-      const foundBlogPost = await BlogModel.findbyID(id);
+      const foundBlogPost = await BlogModel.findById(id);
       if (!foundBlogPost) {
         return res.status(404).json({ message: "Post not found" });
       }
@@ -53,7 +53,7 @@ class BlogController {
   async update(req, res) {
     try {
       const { id } = req.params;
-      const foundBlogPost = await BlogModel.findbyID(id);
+      const foundBlogPost = await BlogModel.findById(id);
       if (!foundBlogPost)
         return res.status(404).json({ message: "Post not found" });
       const Blog = await foundBlogPost.set(req.body).save();

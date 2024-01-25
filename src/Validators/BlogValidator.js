@@ -4,7 +4,7 @@ const { default: mongoose } = require("mongoose");
 
 const create = validateRequest({
   body: z.object({
-    title: z
+    name: z
       .string({ required_error: "The post require a name" })
       .min(2, { message: "Name must be at least 2 characters long" }),
     imageUrl: z.string({ required_error: "The Url is required" }),
@@ -26,7 +26,7 @@ const update = validateRequest({
     id: z.custom(mongoose.isValidObjectId, "The Id is not valid"),
   }),
   body: z.object({
-    title: z.string().optional,
+    name: z.string().optional,
     imageUrl: z.string().optional,
     smallDescription: z.string().optional,
     bigDescription: z.string().optional,

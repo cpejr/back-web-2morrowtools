@@ -2,11 +2,12 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const BlogSchema = new Schema({
-  title: {
+  name: {
     type: String,
     trim: true,
-    unique: true,
-  },
+    required:true,
+    unique:true
+  },  
   imageUrl: {
     type: String,
     required: true,
@@ -34,5 +35,5 @@ const BlogSchema = new Schema({
   },
 });
 
-const BlogModel = mongoose.model("/blog", BlogSchema);
+const BlogModel = mongoose.model("blog", BlogSchema);
 module.exports = BlogModel;
