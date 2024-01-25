@@ -7,26 +7,21 @@ const IAModel = require("../Models/IAModel");
 class FavoriteController {
   async create(req, res) {
     try {
-    const { userId, toolId } = req.body;
+      const { userId, toolId } = req.body;
 
-    const user = await UserModel.findById(userId);
-    if(!user || user.collection.collectionName != "users"){
-        return res
-            .status(403)
-            .json({message: "Id não pertence a um usuário"});
-    }
+      const user = await UserModel.findById(userId);
+      if (!user || user.collection.collectionName != "users") {
+        return res.status(403).json({ message: "Id não pertence a um usuário" });
+      }
 
-    const favoriteFound = await FavoriteModel.find({ userId, toolId });
-    if(favoriteFound.length > 0){
+      const favoriteFound = await FavoriteModel.find({ userId, toolId });
+      if (favoriteFound.length > 0) {
+        await FavoriteModel.deleteMany({ userId, toolId });
+        return res.status(200).json({ message: "Favorito removido" });
+      }
 
-      await  FavoriteModel.deleteMany({ userId, toolId });
-        return res
-            .status(200)
-            .json({message: "Favorito removido"});
-    }
-    
       const Favorite = await FavoriteModel.create(req.body);
-      await Favorite.save();  
+      await Favorite.save();
       res.status(200).json(Favorite);
     } catch (error) {
       res.status(500).json({ message: "ERRO", error: error.message });
@@ -35,24 +30,24 @@ class FavoriteController {
 
   async read(req, res) {
     try {
-
       const { userId } = req.params || null;
-    
-      if(!userId){
-        return res
-          .status(404)
-          .json({ message: "Usuário com id " + id + " não encontrado!" });
+
+      if (!userId) {
+        return res.status(404).json({ message: "Usuário com id " + id + " não encontrado!" });
       }
-      
+
       const Favorites = await FavoriteModel.find({ userId });
 
-      const toolIds = Favorites.map(favorite => favorite.toolId)
+      const toolIds = Favorites.map((favorite) => favorite.toolId);
       let tools = await IAModel.find({
-      '_id': { 
-        $in: toolIds
-        }
-      });
-      
+        _id: {
+          $in: toolIds,
+        },
+      })
+        .populate("id_categoryfeature")
+        .populate("id_categoryprice")
+        .populate("id_categoryprofession");
+
       res.status(200).json(tools);
     } catch (error) {
       res.status(500).json({ message: "ERRO", error: error.message });
@@ -65,16 +60,12 @@ class FavoriteController {
 
       const FavoriteFound = await FavoriteModel.findById(id);
       if (!FavoriteFound) {
-        return res
-          .status(404)
-          .json({ message: "Favorito com id " + id + " não encontrado!" });
+        return res.status(404).json({ message: "Favorito com id " + id + " não encontrado!" });
       }
       await FavoriteFound.deleteOne();
-      res
-        .status(200)
-        .json({
-          mensagem: "Favorito com id " + id + " deletado com sucesso!",
-        });
+      res.status(200).json({
+        mensagem: "Favorito com id " + id + " deletado com sucesso!",
+      });
     } catch (error) {
       res.status(500).json({ message: "ERRO", error: error.message });
     }
@@ -82,12 +73,12 @@ class FavoriteController {
 
   async update(req, res) {
     try {
-      const { id } = req.params; 
+      const { id } = req.params;
       const FavoriteFound = await FavoriteModel.findById(id);
       if (!FavoriteFound)
         return res.status(404).json({ message: "Favorito com id " + id + " não encontrado!" });
-      const Favorite = await FavoriteFound.set(req.body).save(); 
-      res.status(200).json(Favorite); 
+      const Favorite = await FavoriteFound.set(req.body).save();
+      res.status(200).json(Favorite);
     } catch (error) {
       res.status(500).json({ message: "ERRO", error: error.message });
     }

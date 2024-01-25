@@ -37,7 +37,7 @@ const IASchema = new mongoose.Schema(
     },
     imageURL: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     link: {
