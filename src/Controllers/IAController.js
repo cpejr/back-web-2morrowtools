@@ -3,20 +3,29 @@ const convertStringToRegexp = require("../Utils/ConvertStringtoRegexp.js");
 const CategoryPricesModel = require("../Models/CategoryPricesModel.js");
 const CategoryProfessionModel = require("../Models/CategoryProfessionModel.js");
 const CategoryModel = require("../Models/CategoryFeatureModel.js");
+const AvaliationModel = require("../Models/AvaliationModel.js");
+const { uploadImage, editImage, deleteImage, getImage } = require("../config/blobStorage");
 
 class IAController {
   async create(req, res) {
     try {
-      const IA = await IAModel.create(req.body);
+      const IA = await IAModel.create({ ...req.body, imageURL: "" });
+
+      //save image url
+      const { imageURL: base64Image, name } = req.body;
+      const imageURL = await uploadImage(base64Image, name);
+      IA.set({ imageURL });
+      await IA.save();
+
+      //embed youtube videos
       if (!IA.youtubeVideoLink.includes("/embed")) {
         IA.youtubeVideoLink = IA.youtubeVideoLink.replace("watch?v=", "embed/");
         await IA.save();
       }
+
       return res.status(200).json(IA);
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Error while createing an AI", error: error.message });
+      res.status(500).json({ message: "Error while createing an AI", error: error.message });
     }
   }
 
@@ -41,9 +50,7 @@ class IAController {
         return res.status(200).json(IAs);
       }
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Error while fetching IA", error: error.message });
+      res.status(500).json({ message: "Error while fetching IA", error: error.message });
     }
   }
 
@@ -83,7 +90,7 @@ class IAController {
   async filterCategories(req, res) {
     try {
       let idsArray = [];
-      const { id, name } = req.query;
+      const { id, name, type } = req.query;
 
       if (id) {
         idsArray = id.split(",");
@@ -92,7 +99,10 @@ class IAController {
       let tools = [];
 
       if (idsArray.length === 0) {
-        tools = await IAModel.find();
+        tools = await IAModel.find()
+          .populate("id_categoryfeature")
+          .populate("id_categoryprice")
+          .populate("id_categoryprofession");
       } else {
         tools = await IAModel.find({
           $or: [
@@ -100,24 +110,99 @@ class IAController {
             { id_categoryprofession: { $in: idsArray } },
             { id_categoryfeature: { $in: idsArray } },
           ],
-        });
+        })
+          .populate("id_categoryfeature")
+          .populate("id_categoryprice")
+          .populate("id_categoryprofession");
       }
 
       if (name) {
         const regexName = new RegExp(name, "i");
         tools = tools.filter((tool) => regexName.test(tool.name));
       }
+      switch (type) {
+        case "name":
+          const OrderedTools = tools.sort((a, b) => {
+            if (a.name < b.name) {
+              return -1;
+            }
+            if (a.name > b.name) {
+              return 1;
+            }
+            return 0;
+          });
+          tools = OrderedTools;
+          break;
 
-      const uniqueTools = Array.from(new Set(tools.map((tool) => tool.id)));
+        case "date":
+          const OrderedTime = tools.reverse();
+          tools = OrderedTime;
+          break;
 
-      const uniqueToolObjects = await IAModel.find({
-        _id: { $in: uniqueTools },
-      })
-        .populate("id_categoryfeature")
-        .populate("id_categoryprice")
-        .populate("id_categoryprofession");
+        case "avaliation":
+          const starsTools = await AvaliationModel.find();
+          const sums = {};
+          const counts = {};
 
-      return res.status(200).json(uniqueToolObjects);
+          starsTools.forEach((obj) => {
+            const { iaId, rate } = obj;
+
+            if (!sums[iaId]) {
+              sums[iaId] = 0;
+              counts[iaId] = 0;
+            }
+
+            sums[iaId] += rate;
+            counts[iaId]++;
+          });
+          const averages = {};
+          Object.keys(sums).forEach((iaId) => {
+            averages[iaId] = sums[iaId] / counts[iaId];
+          });
+          const averagesArray = Object.entries(averages).map(
+            ([iaId, rate]) => ({
+              iaId: iaId,
+              rate: rate,
+            })
+          );
+          averagesArray.sort((a, b) => b.rate - a.rate);
+          const OrderedStar = tools.sort((a, b) => {
+            const id_a = a._id;
+            const id_b = b._id;
+            const indexA = averagesArray.findIndex(
+              (entry) => entry.iaId == id_a
+            );
+            const indexB = averagesArray.findIndex(
+              (entry) => entry.iaId == id_b
+            );
+            if (indexA == -1 && indexB == -1) {
+              return 0;
+            } else if (indexA == -1) {
+              return 1;
+            } else if (indexB == -1) {
+              return -1;
+            }
+            return indexA - indexB;
+          });
+
+          tools = OrderedStar;
+          break;
+      }
+      const uniqueToolObjects = () => {
+        const mapIds = new Map();
+        const UniqueArray = [];
+        tools.forEach((obj) => {
+          if (!mapIds.has(obj._id)) {
+            mapIds.set(obj._id, true);
+            UniqueArray.push(obj);
+          }
+        });
+        return UniqueArray;
+      };
+
+      const filteredAIs = uniqueToolObjects();
+
+      return res.status(200).json(filteredAIs);
     } catch (error) {
       res.status(500).json({ message: "ERROR", error: error.message });
     }
@@ -131,6 +216,8 @@ class IAController {
       if (!foundIA) {
         return res.status(404).json({ message: "Tool not found!" });
       }
+
+      await deleteImage(foundIA.imageURL);
       await foundIA.deleteOne();
       res.status(200).json({
         message: "Tool successfully deleted!",
@@ -145,10 +232,29 @@ class IAController {
       const { id } = req.params;
       const foundIA = await IAModel.findById(id);
       if (!foundIA) return res.status(404).json({ message: "Tool not found!" });
+
+      let { imageURL } = req.body;
+      if (imageURL) {
+        imageURL = await editImage(imageURL, foundIA.imageURL, foundIA.name);
+        const IA = await foundIA.set({ ...req.body, imageURL }).save();
+        return res.status(200).json(IA);
+      }
+
       const IA = await foundIA.set(req.body).save();
-      res.status(200).json(IA);
+      return res.status(200).json(IA);
     } catch (error) {
       res.status(500).json({ message: "ERROR", error: error.message });
+    }
+  }
+
+  async readImage(req, res) {
+    try {
+      const { imageURL } = req.body;
+
+      const image = await getImage(imageURL);
+      return res.status(200).json({ image });
+    } catch (error) {
+      return res.status(500).json({ message: "ERROR", error: error.message });
     }
   }
 }

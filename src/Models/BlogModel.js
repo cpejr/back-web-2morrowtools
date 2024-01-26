@@ -2,28 +2,32 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const BlogSchema = new Schema({
-  title: {
-    type: string,
-    unique: true,
-    required: true,
-  },
+  name: {
+    type: String,
+    trim: true,
+    required:true,
+    unique:true
+  },  
   imageUrl: {
-    type: string,
+    type: String,
     required: true,
+    trim: true,
   },
-  smallDescription: {
-    type: string,
+  shortDescription: {
+    type: String,
     required: true,
+    trim: true,
   },
-  bigDescription: {
-    type: string,
+  longDescription: {
+    type: String,
     required: true,
+    trim: true,
   },
-  id_categoryfeature: {
+  id_categoryprofession: {
     type: Schema.Types.ObjectId,
-    ref: "categoriesfeature",
+    ref: "categoriesprofession",
     required: true,
-  },
+  },    
   id_categoryfeature: {
     type: Schema.Types.ObjectId,
     ref: "categoriesfeature",
@@ -31,5 +35,5 @@ const BlogSchema = new Schema({
   },
 });
 
-const BlogModel = mongoose.model("/blog", BlogSchema);
+const BlogModel = mongoose.model("blog", BlogSchema);
 module.exports = BlogModel;
