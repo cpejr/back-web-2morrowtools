@@ -4,7 +4,7 @@ const CategoryPricesModel = require("../Models/CategoryPricesModel.js");
 const CategoryProfessionModel = require("../Models/CategoryProfessionModel.js");
 const CategoryModel = require("../Models/CategoryFeatureModel.js");
 const AvaliationModel = require("../Models/AvaliationModel.js");
-const { uploadImage, editImage, deleteImage, getImage } = require("../config/blobStorage");
+const { uploadImage, deleteImage, getImage } = require("../config/blobStorage");
 
 class IAController {
   async create(req, res) {
@@ -159,22 +159,16 @@ class IAController {
           Object.keys(sums).forEach((iaId) => {
             averages[iaId] = sums[iaId] / counts[iaId];
           });
-          const averagesArray = Object.entries(averages).map(
-            ([iaId, rate]) => ({
-              iaId: iaId,
-              rate: rate,
-            })
-          );
+          const averagesArray = Object.entries(averages).map(([iaId, rate]) => ({
+            iaId: iaId,
+            rate: rate,
+          }));
           averagesArray.sort((a, b) => b.rate - a.rate);
           const OrderedStar = tools.sort((a, b) => {
             const id_a = a._id;
             const id_b = b._id;
-            const indexA = averagesArray.findIndex(
-              (entry) => entry.iaId == id_a
-            );
-            const indexB = averagesArray.findIndex(
-              (entry) => entry.iaId == id_b
-            );
+            const indexA = averagesArray.findIndex((entry) => entry.iaId == id_a);
+            const indexB = averagesArray.findIndex((entry) => entry.iaId == id_b);
             if (indexA == -1 && indexB == -1) {
               return 0;
             } else if (indexA == -1) {
@@ -233,11 +227,10 @@ class IAController {
       const foundIA = await IAModel.findById(id);
       if (!foundIA) return res.status(404).json({ message: "Tool not found!" });
 
-      let { imageURL } = req.body;
+      const { imageURL } = req.body;
       if (imageURL) {
-        imageURL = await editImage(imageURL, foundIA.imageURL, foundIA.name);
-        const IA = await foundIA.set({ ...req.body, imageURL }).save();
-        return res.status(200).json(IA);
+        const newImageURL = await uploadImage(imageURL, foundIA.name, foundIA.imageURL);
+        await foundIA.set({ ...req.body, imageURL: newImageURL }).save();
       }
 
       const IA = await foundIA.set(req.body).save();
