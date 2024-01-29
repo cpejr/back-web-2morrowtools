@@ -3,7 +3,7 @@ const CategoryPricesModel = require("../Models/CategoryPricesModel.js");
 const CategoryProfessionModel = require("../Models/CategoryProfessionModel.js");
 const CategoryModel = require("../Models/CategoryFeatureModel.js");
 const AvaliationModel = require("../Models/AvaliationModel.js");
-const { uploadImage, editImage, deleteImage, getImage } = require("../config/blobStorage");
+const { uploadImage, deleteImage, getImage } = require("../config/blobStorage");
 
 class IAController {
   async create(req, res) {
@@ -257,11 +257,10 @@ class IAController {
       const foundIA = await IAModel.findById(id);
       if (!foundIA) return res.status(404).json({ message: "Tool not found!" });
 
-      let { imageURL } = req.body;
+      const { imageURL } = req.body;
       if (imageURL) {
-        imageURL = await editImage(imageURL, foundIA.imageURL, foundIA.name);
-        const IA = await foundIA.set({ ...req.body, imageURL }).save();
-        return res.status(200).json(IA);
+        const newImageURL = await uploadImage(imageURL, foundIA.name, foundIA.imageURL);
+        await foundIA.set({ ...req.body, imageURL: newImageURL }).save();
       }
 
       const IA = await foundIA
