@@ -1,15 +1,39 @@
 const IAModel = require("../Models/IAModel");
-const convertStringToRegexp = require("../Utils/ConvertStringtoRegexp.js");
 const CategoryPricesModel = require("../Models/CategoryPricesModel.js");
 const CategoryProfessionModel = require("../Models/CategoryProfessionModel.js");
 const CategoryModel = require("../Models/CategoryFeatureModel.js");
 const AvaliationModel = require("../Models/AvaliationModel.js");
-const { uploadImage, editImage, deleteImage, getImage } = require("../config/blobStorage");
+const { uploadImage, deleteImage, getImage } = require("../config/blobStorage");
 
 class IAController {
   async create(req, res) {
     try {
-      const IA = await IAModel.create({ ...req.body, imageURL: "" });
+      const { id_categoryfeature, id_categoryprice, id_categoryprofession, ...rest } = req.body;
+
+      const categoryFeatures = await Promise.all(
+        id_categoryfeature.map(async (id) => await CategoryModel.findById(id))
+      );
+      const categoryPrices = await Promise.all(
+        id_categoryprice.map(async (id) => await CategoryPricesModel.findById(id))
+      );
+      const categoryProfessions = await Promise.all(
+        id_categoryprofession.map(async (id) => await CategoryProfessionModel.findById(id))
+      );
+
+      if (
+        categoryFeatures.includes(null) ||
+        categoryPrices.includes(null) ||
+        categoryProfessions.includes(null)
+      ) {
+        return res.status(400).json({ message: "One or more category IDs do not exist" });
+      }
+      const IA = await IAModel.create({
+        id_categoryfeatures: id_categoryfeature,
+        id_categoryprices: id_categoryprice,
+        id_categoryprofessions: id_categoryprofession,
+        ...rest,
+        imageURL: "",
+      });
 
       //save image url
       const { imageURL: base64Image, name } = req.body;
@@ -43,9 +67,9 @@ class IAController {
         return res.status(200).json(foundIA);
       } else {
         const IAs = await IAModel.find(req.body)
-          .populate("id_categoryfeature")
-          .populate("id_categoryprice")
-          .populate("id_categoryprofession");
+          .populate("id_categoryfeatures")
+          .populate("id_categoryprices")
+          .populate("id_categoryprofessions");
 
         return res.status(200).json(IAs);
       }
@@ -74,9 +98,9 @@ class IAController {
       const regexName = new RegExp(name, "i");
       const AIs = await IAModel.find({ name: regexName })
         .sort("name")
-        .populate("id_categoryfeature")
-        .populate("id_categoryprice")
-        .populate("id_categoryprofession");
+        .populate("id_categoryfeatures")
+        .populate("id_categoryprices")
+        .populate("id_categoryprofessions");
 
       return res.status(200).json(AIs);
     } catch (error) {
@@ -99,22 +123,26 @@ class IAController {
       let tools = [];
 
       if (idsArray.length === 0) {
-        tools = await IAModel.find()
-          .populate("id_categoryfeature")
-          .populate("id_categoryprice")
-          .populate("id_categoryprofession");
+        tools = await IAModel.find();
       } else {
-        tools = await IAModel.find({
+        const query = {
           $or: [
             { id_categoryprice: { $in: idsArray } },
             { id_categoryprofession: { $in: idsArray } },
             { id_categoryfeature: { $in: idsArray } },
           ],
-        })
-          .populate("id_categoryfeature")
-          .populate("id_categoryprice")
-          .populate("id_categoryprofession");
+        };
+        tools = await IAModel.find(query);
       }
+      const populatePromises = tools.map(async (tool) => {
+        const populatedTool = await IAModel.populate(
+          tool,
+          "id_categoryfeatures id_categoryprices id_categoryprofessions"
+        );
+        return populatedTool;
+      });
+
+      tools = await Promise.all(populatePromises);
 
       if (name) {
         const regexName = new RegExp(name, "i");
@@ -159,22 +187,16 @@ class IAController {
           Object.keys(sums).forEach((iaId) => {
             averages[iaId] = sums[iaId] / counts[iaId];
           });
-          const averagesArray = Object.entries(averages).map(
-            ([iaId, rate]) => ({
-              iaId: iaId,
-              rate: rate,
-            })
-          );
+          const averagesArray = Object.entries(averages).map(([iaId, rate]) => ({
+            iaId: iaId,
+            rate: rate,
+          }));
           averagesArray.sort((a, b) => b.rate - a.rate);
           const OrderedStar = tools.sort((a, b) => {
             const id_a = a._id;
             const id_b = b._id;
-            const indexA = averagesArray.findIndex(
-              (entry) => entry.iaId == id_a
-            );
-            const indexB = averagesArray.findIndex(
-              (entry) => entry.iaId == id_b
-            );
+            const indexA = averagesArray.findIndex((entry) => entry.iaId == id_a);
+            const indexB = averagesArray.findIndex((entry) => entry.iaId == id_b);
             if (indexA == -1 && indexB == -1) {
               return 0;
             } else if (indexA == -1) {
@@ -230,17 +252,25 @@ class IAController {
   async update(req, res) {
     try {
       const { id } = req.params;
+      const { id_categoryfeature, id_categoryprice, id_categoryprofession, ...rest } = req.body;
+
       const foundIA = await IAModel.findById(id);
       if (!foundIA) return res.status(404).json({ message: "Tool not found!" });
 
-      let { imageURL } = req.body;
+      const { imageURL } = req.body;
       if (imageURL) {
-        imageURL = await editImage(imageURL, foundIA.imageURL, foundIA.name);
-        const IA = await foundIA.set({ ...req.body, imageURL }).save();
-        return res.status(200).json(IA);
+        const newImageURL = await uploadImage(imageURL, foundIA.name, foundIA.imageURL);
+        await foundIA.set({ ...req.body, imageURL: newImageURL }).save();
       }
 
-      const IA = await foundIA.set(req.body).save();
+      const IA = await foundIA
+        .set({
+          id_categoryfeatures: id_categoryfeature,
+          id_categoryprices: id_categoryprice,
+          id_categoryprofessions: id_categoryprofession,
+          ...rest,
+        })
+        .save();
       return res.status(200).json(IA);
     } catch (error) {
       res.status(500).json({ message: "ERROR", error: error.message });
