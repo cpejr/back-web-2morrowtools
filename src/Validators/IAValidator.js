@@ -47,15 +47,15 @@ const create = validateRequest({
 
     link: z.string({ required_error: "The link is required" }),
 
-    id_categoryfeature: z
+    id_categoryfeatures: z
       .array(z.custom(mongoose.isValidObjectId, "The category feature ID is not valid"))
       .min(1, "At least one category feature ID is required"),
 
-    id_categoryprice: z
+    id_categoryprices: z
       .array(z.custom(mongoose.isValidObjectId, "The category price ID is not valid"))
       .min(1, "At least one category price ID is required"),
 
-    id_categoryprofession: z
+    id_categoryprofessions: z
       .array(z.custom(mongoose.isValidObjectId, "The category profession ID is not valid"))
       .min(1, "At least one category profession ID is required"),
   }),
@@ -99,15 +99,15 @@ const update = validateRequest({
 
     link: z.string().optional(),
 
-    id_categoryfeature: z
+    id_categoryfeatures: z
       .array(z.custom(mongoose.isValidObjectId, "The category feature ID is not valid"))
       .optional(),
 
-    id_categoryprice: z
+    id_categoryprices: z
       .array(z.custom(mongoose.isValidObjectId, "The category price ID is not valid"))
       .optional(),
 
-    id_categoryprofession: z
+    id_categoryprofessions: z
       .array(z.custom(mongoose.isValidObjectId, "The category profession ID is not valid"))
       .optional(),
   }),

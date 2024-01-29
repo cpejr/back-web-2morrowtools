@@ -44,9 +44,9 @@ class FavoriteController {
           $in: toolIds,
         },
       })
-        .populate("id_categoryfeature")
-        .populate("id_categoryprice")
-        .populate("id_categoryprofession");
+        .populate("id_categoryfeatures")
+        .populate("id_categoryprices")
+        .populate("id_categoryprofessions");
 
       res.status(200).json(tools);
     } catch (error) {

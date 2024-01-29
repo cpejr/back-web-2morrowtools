@@ -127,9 +127,9 @@ class IAController {
       } else {
         const query = {
           $or: [
-            { id_categoryprice: { $in: idsArray } },
-            { id_categoryprofession: { $in: idsArray } },
-            { id_categoryfeature: { $in: idsArray } },
+            { id_categoryprices: { $in: idsArray } },
+            { id_categoryprofessions: { $in: idsArray } },
+            { id_categoryfeatures: { $in: idsArray } },
           ],
         };
         tools = await IAModel.find(query);
@@ -226,7 +226,7 @@ class IAController {
 
       return res.status(200).json(filteredAIs);
     } catch (error) {
-      res.status(500).json({ message: "ERROR", error: error.message });
+      res.status(500).json({ message: "Error while filtering Ais", error: error.message });
     }
   }
 
@@ -273,7 +273,7 @@ class IAController {
         .save();
       return res.status(200).json(IA);
     } catch (error) {
-      res.status(500).json({ message: "ERROR", error: error.message });
+      res.status(500).json({ message: "Error while updataing Ais", error: error.message });
     }
   }
 
