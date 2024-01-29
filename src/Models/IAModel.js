@@ -4,21 +4,27 @@ const Schema = mongoose.Schema;
 
 const IASchema = new mongoose.Schema(
   {
-    id_categoryfeature: {
-      type: Schema.Types.ObjectId,
-      ref: "categoriesfeature",
-      required: true,
-    },
-    id_categoryprice: {
-      type: Schema.Types.ObjectId,
-      ref: "categoriesprices",
-      required: true,
-    },
-    id_categoryprofession: {
-      type: Schema.Types.ObjectId,
-      ref: "categoriesprofession",
-      required: true,
-    },
+    id_categoryfeatures: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "categoriesfeature",
+        required: true,
+      },
+    ],
+    id_categoryprices: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "categoriesprices",
+        required: true,
+      },
+    ],
+    id_categoryprofessions: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "categoriesprofession",
+        required: true,
+      },
+    ],
     name: {
       type: String,
       required: true,
