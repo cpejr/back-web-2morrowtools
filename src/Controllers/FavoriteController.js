@@ -71,6 +71,23 @@ class FavoriteController {
     }
   }
 
+  async destroyByIds(req, res) {
+    try {
+      const { toolId, userId } = req.params;
+
+      const favorite = await FavoriteModel.find({ toolId, userId });
+      if (!favorite) {
+        return res.status(404).json({ message: "Favorito não encontrado!" });
+      }
+      await FavoriteModel.findByIdAndDelete(favorite[0]._id);
+      res.status(200).json({
+        mensagem: "Favorito deletado com sucesso!",
+      });
+    } catch (error) {
+      res.status(500).json({ message: "ERRO", error: error.message });
+    }
+  }
+
   async update(req, res) {
     try {
       const { id } = req.params;
