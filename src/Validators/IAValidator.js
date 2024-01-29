@@ -47,15 +47,15 @@ const create = validateRequest({
 
     link: z.string({ required_error: "The link is required" }),
 
-    id_categoryfeatures: z
+    id_categoryfeature: z
       .array(z.custom(mongoose.isValidObjectId, "The category feature ID is not valid"))
       .min(1, "At least one category feature ID is required"),
 
-    id_categoryprices: z
+    id_categoryprice: z
       .array(z.custom(mongoose.isValidObjectId, "The category price ID is not valid"))
       .min(1, "At least one category price ID is required"),
 
-    id_categoryprofessions: z
+    id_categoryprofession: z
       .array(z.custom(mongoose.isValidObjectId, "The category profession ID is not valid"))
       .min(1, "At least one category profession ID is required"),
   }),
