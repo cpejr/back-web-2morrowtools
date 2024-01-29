@@ -107,7 +107,12 @@ routes.post("/Favorite", FavoriteValidator.create, FavoriteController.create);
 routes.get("/Favorite/:userId?", FavoriteValidator.read, FavoriteController.read);
 routes.delete("/Favorite/:id", FavoriteValidator.destroy, FavoriteController.destroy);
 routes.put("/Favorite/:id", FavoriteValidator.update, FavoriteController.update);
-routes.delete("/FavoriteByIds/:userId/:toolId", verifyJwt, FavoriteController.destroyByIds);
+routes.delete(
+  "/FavoriteByIds/:userId/:toolId",
+  verifyJwt,
+  FavoriteValidator.destroyByIds,
+  FavoriteController.destroyByIds
+);
 
 // CategoryProfession
 
