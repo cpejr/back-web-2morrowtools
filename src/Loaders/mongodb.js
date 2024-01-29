@@ -8,6 +8,7 @@ async function startDB() {
     `${encodeURI(process.env.MONGO_SERVER)}/` +
     `${encodeURI(process.env.MONGO_DATABASE)}?` +
     `${encodeURI(process.env.MONGO_OPTIONS)}`;
+  console.log("mongo", mongoUri);
   await mongoose.connect(mongoUri);
   console.log("DB conectado.");
 }
