@@ -28,8 +28,14 @@ const update = validateRequest({
   body: z.object({
     name: z.string().optional,
     imageUrl: z.string().optional,
-    smallDescription: z.string().optional,
-    bigDescription: z.string().optional,
+    shortDescription: z.string().optional,
+    longDescription: z.string().optional,
+    id_categoryfeature: z
+      .custom(mongoose.isValidObjectId, "The category feature ID is not valid")
+      .optional(),
+    id_categoryprofession: z
+      .custom(mongoose.isValidObjectId, "The category profession ID is not valid")
+      .optional(),
   }),
 });
 

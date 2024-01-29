@@ -160,7 +160,7 @@ routes.delete("/avaliation", AvaliationController.destroyAll);
 // Blog
 routes.post("/blog", BlogValidator.create, BlogController.create);
 routes.delete("/blog/:id", BlogController.destroy);
-routes.put("/blog", BlogValidator.update, BlogController.update);
+routes.put("/blog/:id", BlogValidator.update, BlogController.update);
 routes.get("/blog", BlogController.read);
 routes.get("/blog/names", BlogController.getAllNames);
 
