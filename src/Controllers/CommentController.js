@@ -13,7 +13,7 @@ class CommentController {
 
   async read(req, res) {
     const { id_ia } = req.params;
-    const comments = await CommentModel.find({ id_ia });
+    const comments = await CommentModel.find({ id_ia }).populate("id_user");
     return res.status(200).json(comments);
   }
 
