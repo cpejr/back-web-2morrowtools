@@ -13,8 +13,8 @@ class BlogController {
   async read(req, res) {
     try {
       const blogs = await BlogModel.find(req.body)
-      .populate("id_categoryfeature")
-      .populate("id_categoryprofession");
+        .populate("id_categoryfeature")
+        .populate("id_categoryprofession");
       return res.status(200).json(blogs);
     } catch (error) {
       res.status(500).json({ message: "Error fetching posts", error: error.message });
@@ -54,8 +54,7 @@ class BlogController {
     try {
       const { id } = req.params;
       const foundBlogPost = await BlogModel.findById(id);
-      if (!foundBlogPost)
-        return res.status(404).json({ message: "Post not found" });
+      if (!foundBlogPost) return res.status(404).json({ message: "Post not found" });
       const Blog = await foundBlogPost.set(req.body).save();
       res.status(200).json(Blog);
     } catch (error) {

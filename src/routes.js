@@ -139,11 +139,7 @@ routes.put(
 // Comment
 routes.post("/comment", CommentValidator.create, CommentController.create);
 routes.get("/comment/:id_ia", CommentController.read);
-routes.delete(
-  "/comment/:id",
-  CommentValidator.destroy,
-  CommentController.destroy
-);
+routes.delete("/comment/:id", CommentValidator.destroy, CommentController.destroy);
 routes.put("/comment/:id", CommentValidator.update, CommentController.update);
 
 //Avaliation
@@ -160,9 +156,8 @@ routes.delete("/avaliation", AvaliationController.destroyAll);
 // Blog
 routes.post("/blog", BlogValidator.create, BlogController.create);
 routes.delete("/blog/:id", BlogController.destroy);
-routes.put("/blog", BlogValidator.update, BlogController.update);
+routes.put("/blog/:id", BlogValidator.update, BlogController.update);
 routes.get("/blog", BlogController.read);
 routes.get("/blog/names", BlogController.getAllNames);
-
 
 module.exports = routes;
