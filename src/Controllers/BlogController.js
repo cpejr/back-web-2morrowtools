@@ -54,7 +54,11 @@ class BlogController {
     try {
       const { id } = req.params;
       const foundBlogPost = await BlogModel.findById(id);
-      if (!foundBlogPost) return res.status(404).json({ message: "Post not found" });
+      if (!foundBlogPost)
+        return res.status(404).json({ message: "Post not found" });
+
+      // newimageUrl?
+
       const Blog = await foundBlogPost.set(req.body).save();
       res.status(200).json(Blog);
     } catch (error) {
