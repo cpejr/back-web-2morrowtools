@@ -4,7 +4,7 @@ const { default: mongoose } = require("mongoose");
 
 const create = validateRequest({
   body: z.object({
-    userId: z.custom(mongoose.isValidObjectId, "Id do usuario é obrigatório" ), 
+    userId: z.custom(mongoose.isValidObjectId, "Id do usuario é obrigatório"),
     toolId: z.custom(mongoose.isValidObjectId, "Id da ferramenta é obrigatório"),
   }),
 });
@@ -14,17 +14,24 @@ const destroy = validateRequest({
     id: z.custom(mongoose.isValidObjectId, "O ID não é válido"),
   }),
 });
+
+const destroyByIds = validateRequest({
+  params: z.object({
+    userId: z.custom(mongoose.isValidObjectId, "O ID de usuário não é válido"),
+    toolId: z.custom(mongoose.isValidObjectId, "O ID de ferramenta não é válido"),
+  }),
+});
+
 const read = validateRequest({
   params: z.object({
     userId: z.custom(mongoose.isValidObjectId, "Id do usuario é obrigatório"),
-  })
-})
+  }),
+});
 
 const update = validateRequest({
   body: z.object({
     UserId: z.custom(mongoose.isValidObjectId).optional(),
     toolId: z.custom(mongoose.isValidObjectId).optional(),
-
   }),
 
   params: z.object({
@@ -37,4 +44,5 @@ module.exports = {
   read,
   destroy,
   update,
+  destroyByIds,
 };

@@ -1,7 +1,14 @@
 const mongoose = require("mongoose");
 
 async function startDB() {
-  await mongoose.connect(process.env.MONGO_URI);
+  const mongoUri =
+    "mongodb+srv://" +
+    `${encodeURI(process.env.MONGO_USER)}:` +
+    `${encodeURI(process.env.MONGO_PASS)}@` +
+    `${encodeURI(process.env.MONGO_SERVER)}/` +
+    `${encodeURI(process.env.MONGO_DATABASE)}?` +
+    `${encodeURI(process.env.MONGO_OPTIONS)}`;
+  await mongoose.connect(mongoUri);
   console.log("DB conectado.");
 }
 
