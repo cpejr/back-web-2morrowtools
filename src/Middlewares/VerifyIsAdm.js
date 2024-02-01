@@ -1,5 +1,4 @@
 function verifyIsAdm(req, res, next) {
-  console.log(req);
   if (req?.userType === "Admin") {
     return next();
   }

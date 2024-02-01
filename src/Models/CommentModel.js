@@ -8,15 +8,15 @@ const CommentSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    id_user : {
-        type : Schema.Types.ObjectId,
-        ref : 'users',
-        required: true,
+    id_user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
     id_ia: {
-        type : Schema.Types.ObjectId,
-        ref : 'IA',
-        required: true,
+      type: Schema.Types.ObjectId,
+      ref: "IA",
+      required: true,
     },
   },
   {
@@ -25,8 +25,5 @@ const CommentSchema = new mongoose.Schema(
   }
 );
 
-const CommentsModel = mongoose.model(
-  "comments",
-  CommentSchema
-);
+const CommentsModel = mongoose.model("comments", CommentSchema);
 module.exports = CommentsModel;

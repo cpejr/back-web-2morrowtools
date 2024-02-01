@@ -22,84 +22,42 @@ const create = validateRequest({
         message: "Large description must be at least 20 characters long",
       })
       .max(750, { message: "Large description cannot exceed 500 characters" }),
-    youtubeVideoLink: z
-      .string()
-      .min(5, {
-        message: "Name must be at least 5 characters long",
-      })
-      .optional(),
 
-    linkedIn: z
-      .string()
-      .min(5, {
-        message: "Name must be at least 5 characters long",
-      })
-      .optional(),
+    youtubeVideoLink: z.string().min(5).optional(),
 
-    discord: z
-      .string()
-      .min(5, {
-        message: "Name must be at least 5 characters long",
-      })
-      .optional(),
+    linkedIn: z.string().min(5).optional(),
 
-    twitterX: z
-      .string()
-      .min(5, {
-        message: "Name must be at least 5 characters long",
-      })
-      .optional(),
+    discord: z.string().min(5).optional(),
 
-    instagram: z
-      .string()
-      .min(5, {
-        message: "Name must be at least 5 characters long",
-      })
-      .optional(),
+    twitterX: z.string().min(5).optional(),
 
-    tiktok: z
-      .string()
-      .min(5, {
-        message: "Name must be at least 5 characters long",
-      })
-      .optional(),
+    instagram: z.string().min(5).optional(),
 
-    facebook: z
-      .string()
-      .min(5, {
-        message: "Name must be at least 5 characters long",
-      })
-      .optional(),
+    tiktok: z.string().min(5).optional(),
 
-    reddit: z
-      .string()
-      .min(5, {
-        message: "Name must be at least 5 characters long",
-      })
-      .optional(),
+    facebook: z.string().min(5).optional(),
 
-    pinterest: z
-      .string()
-      .min(5, {
-        message: "Name must be at least 5 characters long",
-      })
-      .optional(),
+    reddit: z.string().min(5).optional(),
 
-    youtube: z
-      .string()
-      .min(5, {
-        message: "Name must be at least 5 characters long",
-      })
-      .optional(),
+    pinterest: z.string().min(5).optional(),
+
+    youtube: z.string().min(5).optional(),
+
     imageURL: z.string({ required_error: "The image URL is required" }),
-    link: z.string({ required_error: "The link is required" }),
-    id_categoryfeature: z.custom(mongoose.isValidObjectId, "The category feature ID is not valid"),
-    id_categoryprice: z.custom(mongoose.isValidObjectId, "The category price ID is not valid"),
 
-    id_categoryprofession: z.custom(
-      mongoose.isValidObjectId,
-      "The category profession ID is not valid"
-    ),
+    link: z.string({ required_error: "The link is required" }),
+
+    id_categoryfeature: z
+      .array(z.custom(mongoose.isValidObjectId, "The category feature ID is not valid"))
+      .min(1, "At least one category feature ID is required"),
+
+    id_categoryprice: z
+      .array(z.custom(mongoose.isValidObjectId, "The category price ID is not valid"))
+      .min(1, "At least one category price ID is required"),
+
+    id_categoryprofession: z
+      .array(z.custom(mongoose.isValidObjectId, "The category profession ID is not valid"))
+      .min(1, "At least one category profession ID is required"),
   }),
 });
 
@@ -111,106 +69,46 @@ const destroy = validateRequest({
 
 const update = validateRequest({
   body: z.object({
-    name: z
-      .string()
-      .min(2, { message: "Name must be at least 2 characters long" })
-      .max(60, { message: "Name cannot exceed 60 characters" })
-      .optional(),
+    name: z.string().min(2).max(60).optional(),
 
-    shortDescription: z
-      .string()
-      .min(2, {
-        message: "Short description must be at least 2 characters long",
-      })
-      .max(100, { message: "Short description cannot exceed 60 characters" })
-      .optional(),
-    longDescription: z
-      .string()
-      .min(20, {
-        message: "Long description must be at least 20 characters long",
-      })
-      .max(750, { message: "Long description cannot exceed 500 characters" })
-      .optional(),
-    youtubeVideoLink: z
-      .string()
-      .min(5, {
-        message: "Name must be at least 5 characters long",
-      })
-      .optional(),
+    shortDescription: z.string().min(2).max(100).optional(),
 
-    linkedIn: z
-      .string()
-      .min(5, {
-        message: "Name must be at least 5 characters long",
-      })
-      .optional(),
+    longDescription: z.string().min(20).max(750).optional(),
 
-    discord: z
-      .string()
-      .min(5, {
-        message: "Name must be at least 5 characters long",
-      })
-      .optional(),
+    youtubeVideoLink: z.string().min(5).optional(),
 
-    twitterX: z
-      .string()
-      .min(5, {
-        message: "Name must be at least 5 characters long",
-      })
-      .optional(),
+    linkedIn: z.string().min(5).optional(),
 
-    instagram: z
-      .string()
-      .min(5, {
-        message: "Name must be at least 5 characters long",
-      })
-      .optional(),
+    discord: z.string().min(5).optional(),
 
-    tiktok: z
-      .string()
-      .min(5, {
-        message: "Name must be at least 5 characters long",
-      })
-      .optional(),
+    twitterX: z.string().min(5).optional(),
 
-    facebook: z
-      .string()
-      .min(5, {
-        message: "Name must be at least 5 characters long",
-      })
-      .optional(),
+    instagram: z.string().min(5).optional(),
 
-    reddit: z
-      .string()
-      .min(5, {
-        message: "Name must be at least 5 characters long",
-      })
-      .optional(),
+    tiktok: z.string().min(5).optional(),
 
-    pinterest: z
-      .string()
-      .min(5, {
-        message: "Name must be at least 5 characters long",
-      })
-      .optional(),
+    facebook: z.string().min(5).optional(),
 
-    youtube: z
-      .string()
-      .min(5, {
-        message: "Name must be at least 5 characters long",
-      })
-      .optional(),
+    reddit: z.string().min(5).optional(),
+
+    pinterest: z.string().min(5).optional(),
+
+    youtube: z.string().min(5).optional(),
 
     imageURL: z.string().optional(),
+
     link: z.string().optional(),
-    id_categoryfeature: z
-      .custom(mongoose.isValidObjectId, "The category feature ID is not valid")
+
+    id_categoryfeatures: z
+      .array(z.custom(mongoose.isValidObjectId, "The category feature ID is not valid"))
       .optional(),
-    id_categoryprice: z
-      .custom(mongoose.isValidObjectId, "The category price ID is not valid")
+
+    id_categoryprices: z
+      .array(z.custom(mongoose.isValidObjectId, "The category price ID is not valid"))
       .optional(),
-    id_categoryprofession: z
-      .custom(mongoose.isValidObjectId, "The category profession ID is not valid")
+
+    id_categoryprofessions: z
+      .array(z.custom(mongoose.isValidObjectId, "The category profession ID is not valid"))
       .optional(),
   }),
 
