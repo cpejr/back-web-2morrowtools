@@ -1,12 +1,11 @@
 const BlogModel = require("../Models/BlogModel");
 const { uploadImage, deleteImage, getImage } = require("../config/blobStorage");
 
-
 class BlogController {
   async create(req, res) {
     try {
-      const blog = await BlogModel.create({ ...req.body, imageUrl: "EMPTY" });      //save image url
-      
+      const blog = await BlogModel.create({ ...req.body, imageUrl: "EMPTY" }); //save image url
+
       const { imageUrl: base64Image, name } = req.body;
       const imageUrl = await uploadImage(base64Image, name);
       blog.set({ imageUrl });
@@ -20,7 +19,7 @@ class BlogController {
 
   async read(req, res) {
     try {
-      const blogs = await BlogModel.find(req.body)
+      const blogs = await BlogModel.find()
         .populate("id_categoryfeature")
         .populate("id_categoryprofession");
       return res.status(200).json(blogs);
@@ -64,14 +63,13 @@ class BlogController {
     try {
       const { id } = req.params;
       const foundBlogPost = await BlogModel.findById(id);
-      if (!foundBlogPost)
-        return res.status(404).json({ message: "Post not found" });
+      if (!foundBlogPost) return res.status(404).json({ message: "Post not found" });
 
-        const { imageUrl } = req.body;
-        if (imageUrl) {
-          const newImageURL = await uploadImage(imageUrl, foundBlogPost.name, foundBlogPost.imageUrl);
-          await foundBlogPost.set({ ...req.body, imageUrl: newImageURL }).save();
-        }
+      const { imageUrl } = req.body;
+      if (imageUrl) {
+        const newImageURL = await uploadImage(imageUrl, foundBlogPost.name, foundBlogPost.imageUrl);
+        await foundBlogPost.set({ ...req.body, imageUrl: newImageURL }).save();
+      }
 
       const Blog = await foundBlogPost.set(req.body).save();
       res.status(200).json(Blog);
