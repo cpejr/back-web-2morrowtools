@@ -20,8 +20,8 @@ const CommentValidator = require("./Validators/CommentValidator");
 const CommentController = require("./Controllers/CommentController");
 const AvaliationValidator = require("./Validators/AvaliationValidator");
 const AvaliationController = require("./Controllers/AvaliationController");
-const BlogController = require("./Controllers/BlogController");
-const BlogValidator = require("./Validators/BlogValidator");
+const PostController = require("./Controllers/PostController");
+const PostValidator = require("./Validators/PostValidator");
 
 const routes = Router();
 
@@ -159,11 +159,11 @@ routes.put("/avaliation/:id", AvaliationValidator.update, AvaliationController.u
 routes.get("/avaliation/:iaId", AvaliationController.getByIaId);
 routes.delete("/avaliation", AvaliationController.destroyAll);
 
-// Blog
-routes.post("/blog", BlogValidator.create, BlogController.create);
-routes.delete("/blog/:id", BlogController.destroy);
-routes.put("/blog/:id", BlogValidator.update, BlogController.update);
-routes.get("/blog", BlogController.read);
-routes.get("/blog/names", BlogController.getAllNames);
+// Post
+routes.post("/posts",  PostValidator.create, PostController.create);
+routes.delete("/posts/:id",  PostController.destroy);
+routes.put("/posts/:id",  PostValidator.update, PostController.update);
+routes.get("/posts", PostController.read);
+routes.get("/posts/names", PostController.getAllNames);
 
 module.exports = routes;

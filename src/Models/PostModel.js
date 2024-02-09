@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const BlogSchema = new Schema({
+const PostSchema = new Schema({
   name: {
     type: String,
     trim: true,
@@ -23,17 +23,21 @@ const BlogSchema = new Schema({
     required: true,
     trim: true,
   },
-  id_categoryprofession: {
-    type: Schema.Types.ObjectId,
-    ref: "categoriesprofession",
-    required: true,
-  },    
-  id_categoryfeature: {
-    type: Schema.Types.ObjectId,
-    ref: "categoriesfeature",
-    required: true,
-  },
+  id_categoryfeatures: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "categoriesfeature",
+      required: true,
+    },
+  ],
+  id_categoryprofessions: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "categoriesprofession",
+      required: true,
+    },
+  ],
 });
 
-const BlogModel = mongoose.model("blog", BlogSchema);
-module.exports = BlogModel;
+const PostModel = mongoose.model("blog", PostSchema);
+module.exports = PostModel;
