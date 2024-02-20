@@ -65,6 +65,22 @@ class PostController {
     }
   }
 
+  async getByName(req, res) {
+    try {
+      const { name } = req.params;
+      const post = await PostModel.find({ name: name })
+      .populate("id_categoryfeatures")
+      .populate("id_categoryprofessions");
+
+     return res.status(200).json(post.at(0));
+    } catch (error) {
+      res.status(500).json({
+        message: "Error while fetching Post",
+        error: error.message,
+      });
+    }
+  }
+
   async destroy(req, res) {
     try {
       const { id } = req.params;
@@ -113,7 +129,7 @@ class PostController {
 
       res.status(200).json(foundPost);
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       res.status(500).json({ message: "Error while updating post", error: error.message });
     }
   }
@@ -125,7 +141,7 @@ class PostController {
       const image = await getImage(imageUrl);
       return res.status(200).json({ image });
     } catch (error) {
-      return res.status(500).json({ message: "Error reading image", error: error.message });
+      return res.status(500).json({ message: "ERROR", error: error.message });
     }
   }
 }

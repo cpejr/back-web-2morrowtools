@@ -173,5 +173,7 @@ routes.delete("/posts/:id",  PostController.destroy);
 routes.put("/posts/:id",  PostValidator.update, PostController.update);
 routes.get("/posts", PostController.read);
 routes.get("/posts/names", PostController.getAllNames);
+routes.get("/posts/:name", PostController.getByName);
+routes.post("/postImage", PostValidator.readImage, PostController.readImage);
 
 module.exports = routes;
