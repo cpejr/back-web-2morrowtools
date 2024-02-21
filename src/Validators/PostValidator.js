@@ -56,6 +56,12 @@ const update = validateRequest({
   }),
 });
 
+const read = validateRequest({
+  body: z.object({
+    name: z.string().optional(),
+  }),
+});
+
 const readImage = validateRequest({
   body: z.object({
     imageUrl: z.string(),
@@ -65,6 +71,7 @@ const readImage = validateRequest({
 module.exports = {
   create,
   destroy,
+  read,
   update,
   readImage,
 };

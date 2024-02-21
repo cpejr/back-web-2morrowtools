@@ -3,11 +3,9 @@ const CategoryModel = require("../Models/CategoryFeatureModel.js");
 const CategoryProfessionModel = require("../Models/CategoryProfessionModel.js");
 const { uploadImage, deleteImage, getImage } = require("../config/blobStorage");
 
-
 class PostController {
   async create(req, res) {
     try {
-
       const { id_categoryfeature, id_categoryprofession, ...rest } = req.body;
 
       const categoryFeatures = await Promise.all(
@@ -17,8 +15,9 @@ class PostController {
         id_categoryprofession.map(async (id) => await CategoryProfessionModel.findById(id))
       );
 
-      if ( categoryFeatures.includes(null) || categoryProfessions.includes(null) ) 
-      { return res.status(400).json({ message: "One or more category IDs do not exist" }); }
+      if (categoryFeatures.includes(null) || categoryProfessions.includes(null)) {
+        return res.status(400).json({ message: "One or more category IDs do not exist" });
+      }
 
       const post = await PostModel.create({
         id_categoryfeatures: id_categoryfeature,
@@ -42,12 +41,22 @@ class PostController {
 
   async read(req, res) {
     try {
-      const post = await PostModel.find(req.body)
-        .populate("id_categoryfeatures")
-        .populate("id_categoryprofessions");
-      return res.status(200).json(post);
+      const { name } = req.body;
+      let post;
+
+      if (!name) {
+        post = await PostModel.find()
+          .populate("id_categoryfeatures")
+          .populate("id_categoryprofessions");
+        return res.status(200).json(post);
+      } else {
+        post = await PostModel.find({ name: name })
+          .populate("id_categoryfeatures")
+          .populate("id_categoryprofessions");
+        return res.status(200).json(post.at(0));
+      }
     } catch (error) {
-      res.status(500).json({ message: "Error fetching post", error: error.message });
+      res.status(500).json({ message: "Error fetching posts", error: error.message });
     }
   }
 
@@ -60,22 +69,6 @@ class PostController {
     } catch (error) {
       res.status(500).json({
         message: "Error while fetching Post names",
-        error: error.message,
-      });
-    }
-  }
-
-  async getByName(req, res) {
-    try {
-      const { name } = req.params;
-      const post = await PostModel.find({ name: name })
-      .populate("id_categoryfeatures")
-      .populate("id_categoryprofessions");
-
-     return res.status(200).json(post.at(0));
-    } catch (error) {
-      res.status(500).json({
-        message: "Error while fetching Post",
         error: error.message,
       });
     }
@@ -100,32 +93,44 @@ class PostController {
 
   async update(req, res) {
     try {
-
       const { id } = req.params;
       const foundPost = await PostModel.findById(id);
-      if (!foundPost)
-        { return res.status(404).json({ message: "Post not found" }); }
-
-      const { name, imageUrl, shortDescription, longDescription, id_categoryfeature, id_categoryprofession } = req.body;
-
-      if (name) 
-      { await foundPost.set({ name: name }).save(); }
-      if (imageUrl) {
-        const newImageURL = await uploadImage(imageUrl, foundPost.name, foundPost.imageUrl);
-        await foundPost.set({imageUrl: newImageURL }).save();
+      if (!foundPost) {
+        return res.status(404).json({ message: "Post not found" });
       }
 
-      if (shortDescription) 
-      { await foundPost.set({ shortDescription: shortDescription }).save(); }
+      const {
+        name,
+        imageUrl,
+        shortDescription,
+        longDescription,
+        id_categoryfeature,
+        id_categoryprofession,
+      } = req.body;
 
-      if (longDescription) 
-        { await foundPost.set({ longDescription: longDescription }).save(); }
+      if (name) {
+        await foundPost.set({ name: name }).save();
+      }
+      if (imageUrl) {
+        const newImageURL = await uploadImage(imageUrl, foundPost.name, foundPost.imageUrl);
+        await foundPost.set({ imageUrl: newImageURL }).save();
+      }
 
-      if (id_categoryfeature.length != 0)
-        { await foundPost.set({ id_categoryfeatures: id_categoryfeature }).save(); }
+      if (shortDescription) {
+        await foundPost.set({ shortDescription: shortDescription }).save();
+      }
 
-      if (id_categoryprofession.length != 0)
-        { await foundPost.set({ id_categoryprofessions: id_categoryprofession }).save(); }
+      if (longDescription) {
+        await foundPost.set({ longDescription: longDescription }).save();
+      }
+
+      if (id_categoryfeature.length != 0) {
+        await foundPost.set({ id_categoryfeatures: id_categoryfeature }).save();
+      }
+
+      if (id_categoryprofession.length != 0) {
+        await foundPost.set({ id_categoryprofessions: id_categoryprofession }).save();
+      }
 
       res.status(200).json(foundPost);
     } catch (error) {
