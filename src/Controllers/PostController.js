@@ -74,6 +74,21 @@ class PostController {
     }
   }
 
+  async getAllPosts(req, res) {
+    try {
+      const posts = await PostModel.find()
+        .populate("id_categoryfeatures")
+        .populate("id_categoryprofessions");
+
+      return res.status(200).json(posts);
+    } catch (error) {
+      res.status(500).json({
+        message: "Error while fetching Posts",
+        error: error.message,
+      });
+    }
+  }
+
   async destroy(req, res) {
     try {
       const { id } = req.params;
