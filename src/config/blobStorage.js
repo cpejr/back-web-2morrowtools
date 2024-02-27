@@ -31,7 +31,7 @@ async function uploadImage(image, name, previousImage = "") {
 
   if (imageExists(previousImage)) await deleteImage(previousImage);
 
-  const formattedName = name.replace(/\s/g, "").replace(/\./g, "");
+  const formattedName = name.replace(/[^\w\s]/gi, '').replace(/\s+/g, '');
   const blobName = formattedName + uuidv1();
 
   const containerClient = getContainer();

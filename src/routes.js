@@ -20,6 +20,8 @@ const CommentValidator = require("./Validators/CommentValidator");
 const CommentController = require("./Controllers/CommentController");
 const AvaliationValidator = require("./Validators/AvaliationValidator");
 const AvaliationController = require("./Controllers/AvaliationController");
+const PostController = require("./Controllers/PostController");
+const PostValidator = require("./Validators/PostValidator");
 const NewsletterController = require("./Controllers/NewsletterController");
 const NewsletterValidator = require("./Validators/NewsletterValidator");
 
@@ -164,5 +166,14 @@ routes.post("/newsletter", NewsletterValidator.create, NewsletterController.crea
 routes.get("/newsletter/", NewsletterController.read);
 routes.delete("/newsletter/:id", NewsletterValidator.destroy, NewsletterController.destroy);
 routes.put("/newsletter/:id", NewsletterValidator.update, NewsletterController.update);
+
+// Post
+routes.post("/posts", PostValidator.create, PostController.create);
+routes.delete("/posts/:id", PostController.destroy);
+routes.put("/posts/:id", PostValidator.update, PostController.update);
+routes.put("/posts", PostValidator.read, PostController.read);
+routes.get("/posts/names", PostController.getAllNames);
+routes.post("/postImage", PostValidator.readImage, PostController.readImage);
+routes.get("/post", PostController.getAllPosts);
 
 module.exports = routes;
