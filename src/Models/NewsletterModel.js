@@ -20,9 +20,14 @@ const NewsletterSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    userID: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   {
     versionKey: false,
+    timestamps: true,
   }
 );
 

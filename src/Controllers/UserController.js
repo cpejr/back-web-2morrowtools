@@ -5,6 +5,7 @@ class UserController {
   async create(req, res) {
     try {
       let userFound = await UserModel.findOne({ email: req.body.email });
+      await UserModel.findOneAndUpdate({ email: req.body.email }, { lastLogin: Date.now() });
 
       if (!userFound) {
         userFound = await UserModel.create(req.body);
