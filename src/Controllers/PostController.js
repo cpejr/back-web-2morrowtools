@@ -76,9 +76,23 @@ class PostController {
 
   async getAllPosts(req, res) {
     try {
+      const { filters } = req.query;
       const posts = await PostModel.find()
         .populate("id_categoryfeatures")
         .populate("id_categoryprofessions");
+
+      posts.reverse(); //order by date
+      if (filters?.sort === "name") {
+        posts.sort((a, b) => {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        });
+      }
 
       return res.status(200).json(posts);
     } catch (error) {
