@@ -68,10 +68,17 @@ const readImage = validateRequest({
   }),
 });
 
+const getAllPosts = validateRequest({
+  body: z.object({
+    sort: z.object().optional(),
+  }),
+});
+
 module.exports = {
   create,
   destroy,
   read,
   update,
   readImage,
+  getAllPosts,
 };
