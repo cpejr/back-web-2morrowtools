@@ -15,14 +15,11 @@ const NewsletterSchema = new mongoose.Schema(
       trim: true,
       unique: true,
     },
-    message: {
-      type: String,
-      required: true,
-      trim: true,
-    },
     userID: {
       type: Schema.Types.ObjectId,
+      trim: true,
       ref: "User",
+      required: true,
     },
   },
   {
