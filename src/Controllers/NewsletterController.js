@@ -15,7 +15,7 @@ class NewsletterController {
 
   async read(req, res) {
     try {
-      const newsletter = await NewsletterModel.find().populate("userID");
+      const newsletter = await NewsletterModel.find();
       return res.status(200).json(newsletter);
     } catch (error) {
       res
