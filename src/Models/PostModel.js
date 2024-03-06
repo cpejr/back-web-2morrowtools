@@ -5,9 +5,9 @@ const PostSchema = new Schema({
   name: {
     type: String,
     trim: true,
-    required:true,
-    unique:true
-  },  
+    required: true,
+    unique: true,
+  },
   imageUrl: {
     type: String,
     required: true,
@@ -16,6 +16,11 @@ const PostSchema = new Schema({
   shortDescription: {
     type: String,
     required: true,
+    trim: true,
+  },
+  html: {
+    type: String,
+    required: false,
     trim: true,
   },
   longDescription: {
