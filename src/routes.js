@@ -176,4 +176,6 @@ routes.get("/posts/names", PostController.getAllNames);
 routes.post("/postImage", PostValidator.readImage, PostController.readImage);
 routes.get("/post", PostValidator.getAllPosts, PostController.getAllPosts);
 
+routes.post("/image", PostController.postImage);
+
 module.exports = routes;

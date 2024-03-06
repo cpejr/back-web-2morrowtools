@@ -178,6 +178,16 @@ class PostController {
       return res.status(500).json({ message: "ERROR", error: error.message });
     }
   }
+
+  async postImage(req, res) {
+    try {
+      const { file } = req.body;
+      const imageURL = await uploadImage(file, "postImage");
+      return res.status(200).json({ imageURL });
+    } catch (error) {
+      return res.status(500).json({ message: "ERROR", error: error.message });
+    }
+  }
 }
 
 module.exports = new PostController();

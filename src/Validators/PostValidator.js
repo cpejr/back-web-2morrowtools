@@ -56,6 +56,12 @@ const update = validateRequest({
   }),
 });
 
+const postImage = validateRequest({
+  body: z.object({
+    file: z.string(),
+  }),
+});
+
 const read = validateRequest({
   body: z.object({
     name: z.string().optional(),
@@ -81,4 +87,5 @@ module.exports = {
   update,
   readImage,
   getAllPosts,
+  postImage,
 };
