@@ -6,8 +6,8 @@ function getContainer() {
   const containerName = process.env.AZURE_CONTAINER_NAME;
 
   const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
-  const containerClient = blobServiceClient.getContainerClient(containerName);
 
+  const containerClient = blobServiceClient.getContainerClient(containerName);
   return containerClient;
 }
 
@@ -36,6 +36,8 @@ async function uploadImage(image, name, previousImage = "") {
 
   const containerClient = getContainer();
   const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+  console.log(blockBlobClient);
+  console.log("------------------------------------------------");
   const uploadBlobResponse = await blockBlobClient.upload(image, image.length);
 
   return blockBlobClient?.url;

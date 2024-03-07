@@ -35,6 +35,7 @@ class PostController {
 
       return res.status(200).json(post);
     } catch (error) {
+      console.log(error);
       res.status(500).json({ message: "Error while creating post", error: error.message });
     }
   }
@@ -128,14 +129,8 @@ class PostController {
         return res.status(404).json({ message: "Post not found" });
       }
 
-      const {
-        name,
-        imageUrl,
-        shortDescription,
-        longDescription,
-        id_categoryfeature,
-        id_categoryprofession,
-      } = req.body;
+      const { name, imageUrl, shortDescription, id_categoryfeature, id_categoryprofession, html } =
+        req.body;
 
       if (name) {
         await foundPost.set({ name: name }).save();
@@ -149,8 +144,8 @@ class PostController {
         await foundPost.set({ shortDescription: shortDescription }).save();
       }
 
-      if (longDescription) {
-        await foundPost.set({ longDescription: longDescription }).save();
+      if (html) {
+        await foundPost.set({ html }).save();
       }
 
       if (id_categoryfeature.length != 0) {

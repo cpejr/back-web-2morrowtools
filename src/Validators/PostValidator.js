@@ -16,19 +16,13 @@ const create = validateRequest({
         message: "Short description must be at least 2 characters long",
       })
       .max(1000, { message: "Short description must not exceed 1000 characters" }),
-
-    longDescription: z
-      .string({ required_error: "The large description is required" })
-      .min(20, {
-        message: "Large description must be at least 20 characters long",
-      })
-      .max(7500, { message: "Large description must not exceed 7500 characters" }),
     id_categoryfeature: z
       .array(z.custom(mongoose.isValidObjectId, "The category feature ID is not valid"))
       .min(1, "At least one category feature ID is required"),
     id_categoryprofession: z
       .array(z.custom(mongoose.isValidObjectId, "The category profession ID is not valid"))
       .min(1, "At least one category profession ID is required"),
+    html: z.string({ required_error: "The page is required" }),
   }),
 });
 
@@ -46,7 +40,7 @@ const update = validateRequest({
     name: z.string().optional(),
     imageUrl: z.string().optional(),
     shortDescription: z.string().optional(),
-    longDescription: z.string().optional(),
+    html: z.string().optional(),
     id_categoryfeatures: z
       .array(z.custom(mongoose.isValidObjectId, "The category feature ID is not valid"))
       .optional(),
