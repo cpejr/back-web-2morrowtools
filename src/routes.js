@@ -146,7 +146,7 @@ routes.put(
 );
 // Comment
 routes.post("/comment", CommentValidator.create, CommentController.create);
-routes.get("/comment/:id_ia", CommentController.read);
+routes.get("/comment/:id", CommentController.read);
 routes.delete("/comment/:id", CommentValidator.destroy, CommentController.destroy);
 routes.put("/comment/:id", CommentValidator.update, CommentController.update);
 

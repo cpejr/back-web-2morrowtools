@@ -36,8 +36,6 @@ async function uploadImage(image, name, previousImage = "") {
 
   const containerClient = getContainer();
   const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-  console.log(blockBlobClient);
-  console.log("------------------------------------------------");
   const uploadBlobResponse = await blockBlobClient.upload(image, image.length);
 
   return blockBlobClient?.url;

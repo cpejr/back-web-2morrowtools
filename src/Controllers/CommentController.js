@@ -12,16 +12,10 @@ class CommentController {
   }
 
   async read(req, res) {
-    const { id_ia, id_post } = req.params;
-    let comments;
-
-    if (id_ia) {
-      comments = await CommentModel.find({ id_ia }).populate("id_user");
-    } else if (id_post) {
-      comments = await CommentModel.find({ id_post }).populate("id_user");
-    }
-
-    return res.status(200).json(comments);
+    const { id } = req.params;
+    const iaComments = await CommentModel.find({ id_ia: id }).populate("id_user");
+    const postComments = await CommentModel.find({ id_post: id }).populate("id_user");
+    return res.status(200).json([...iaComments, ...postComments]);
   }
 
   async destroy(req, res) {
