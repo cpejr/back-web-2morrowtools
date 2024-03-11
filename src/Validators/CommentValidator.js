@@ -9,14 +9,9 @@ const create = validateRequest({
       .min(2, { message: "The comment is too short" })
       .max(500, { message: "The comment is too long" }),
 
-    id_user: z.custom(
-      mongoose.isValidObjectId,
-      "The user id is not valid"
-    ),
-    id_ia: z.custom(
-      mongoose.isValidObjectId,
-      "The IA id is not valid"
-    ),
+    id_user: z.custom(mongoose.isValidObjectId, "The user id is not valid"),
+    id_ia: z.custom(mongoose.isValidObjectId, "The IA id is not valid").optional(),
+    id_post: z.custom(mongoose.isValidObjectId, "The post id is not valid").optional(),
   }),
 });
 
@@ -29,18 +24,13 @@ const destroy = validateRequest({
 const update = validateRequest({
   body: z.object({
     comment: z
-    .string()
-    .min(2, { message: "The comment is too short" })
-    .max(500, { message: "The comment is too long" })
-    .optional(),
-    id_user: z.custom(
-        mongoose.isValidObjectId,
-        "The user id is not valid"
-    ),
-    id_ia: z.custom(
-        mongoose.isValidObjectId,
-        "The IA id is not valid"
-    ),
+      .string()
+      .min(2, { message: "The comment is too short" })
+      .max(500, { message: "The comment is too long" })
+      .optional(),
+    id_user: z.custom(mongoose.isValidObjectId, "The user id is not valid"),
+    id_ia: z.custom(mongoose.isValidObjectId, "The IA id is not valid").optional(),
+    id_post: z.custom(mongoose.isValidObjectId, "The post id is not valid").optional(),
   }),
 
   params: z.object({

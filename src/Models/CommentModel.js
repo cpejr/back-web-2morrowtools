@@ -16,7 +16,12 @@ const CommentSchema = new mongoose.Schema(
     id_ia: {
       type: Schema.Types.ObjectId,
       ref: "IA",
-      required: true,
+      required: false,
+    },
+    id_post: {
+      type: Schema.Types.ObjectId,
+      ref: "blog",
+      required: false,
     },
   },
   {

@@ -146,7 +146,7 @@ routes.put(
 );
 // Comment
 routes.post("/comment", CommentValidator.create, CommentController.create);
-routes.get("/comment/:id_ia", CommentController.read);
+routes.get("/comment/:id", CommentController.read);
 routes.delete("/comment/:id", CommentValidator.destroy, CommentController.destroy);
 routes.put("/comment/:id", CommentValidator.update, CommentController.update);
 
@@ -168,6 +168,7 @@ routes.delete("/newsletter/:id", NewsletterValidator.destroy, NewsletterControll
 routes.put("/newsletter/:id", NewsletterValidator.update, NewsletterController.update);
 
 // Post
+routes.get("/posts/find-by-id", PostController.findByIDs);
 routes.post("/posts", PostValidator.create, PostController.create);
 routes.delete("/posts/:id", PostController.destroy);
 routes.put("/posts/:id", PostValidator.update, PostController.update);
@@ -175,5 +176,7 @@ routes.put("/posts", PostValidator.read, PostController.read);
 routes.get("/posts/names", PostController.getAllNames);
 routes.post("/postImage", PostValidator.readImage, PostController.readImage);
 routes.get("/post", PostValidator.getAllPosts, PostController.getAllPosts);
+
+routes.post("/image", PostController.postImage);
 
 module.exports = routes;
