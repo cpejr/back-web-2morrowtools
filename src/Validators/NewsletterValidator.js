@@ -15,14 +15,6 @@ const create = validateRequest({
     email: z
       .string({ required_error: "The email is required" })
       .email({ message: "Invalid email" }),
-    message: z
-      .string()
-      .min(1, {
-        message: "Message must not be empty",
-      })
-      .max(500, {
-        message: "Message cannot exceed 500 characters",
-      }),
   }),
 });
 
