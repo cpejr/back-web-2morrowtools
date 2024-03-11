@@ -103,6 +103,40 @@ class PostController {
     }
   }
 
+  async findByIDs(req, res) {
+    try {
+      let idsArray = [];
+      const { id } = req.query;
+      if (id) {
+        idsArray = id.split(",");
+      }
+
+      let posts = [];
+
+      if (idsArray.length > 0) {
+        const query = {
+          $or: [
+            { id_categoryfeatures: { $in: idsArray } },
+            { id_categoryprofessions: { $in: idsArray } },
+          ],
+        };
+        posts = await PostModel.find(query);
+        const populatePromises = posts.map(async (post) => {
+          const populatedPost = await PostModel.populate(
+            post,
+            "id_categoryfeatures id_categoryprofessions"
+          );
+          return populatedPost;
+        });
+        posts = await Promise.all(populatePromises);
+      }
+
+      return res.status(200).json(posts);
+    } catch (error) {
+      res.status(500).json({ message: "Error while fetching Posts", error: error.message });
+    }
+  }
+
   async destroy(req, res) {
     try {
       const { id } = req.params;
@@ -128,14 +162,8 @@ class PostController {
         return res.status(404).json({ message: "Post not found" });
       }
 
-      const {
-        name,
-        imageUrl,
-        shortDescription,
-        longDescription,
-        id_categoryfeature,
-        id_categoryprofession,
-      } = req.body;
+      const { name, imageUrl, shortDescription, id_categoryfeature, id_categoryprofession, html } =
+        req.body;
 
       if (name) {
         await foundPost.set({ name: name }).save();
@@ -149,8 +177,8 @@ class PostController {
         await foundPost.set({ shortDescription: shortDescription }).save();
       }
 
-      if (longDescription) {
-        await foundPost.set({ longDescription: longDescription }).save();
+      if (html) {
+        await foundPost.set({ html }).save();
       }
 
       if (id_categoryfeature.length != 0) {
@@ -174,6 +202,16 @@ class PostController {
 
       const image = await getImage(imageUrl);
       return res.status(200).json({ image });
+    } catch (error) {
+      return res.status(500).json({ message: "ERROR", error: error.message });
+    }
+  }
+
+  async postImage(req, res) {
+    try {
+      const { file } = req.body;
+      const imageURL = await uploadImage(file, "postImage");
+      return res.status(200).json({ imageURL });
     } catch (error) {
       return res.status(500).json({ message: "ERROR", error: error.message });
     }

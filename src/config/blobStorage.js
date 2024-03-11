@@ -6,8 +6,8 @@ function getContainer() {
   const containerName = process.env.AZURE_CONTAINER_NAME;
 
   const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
-  const containerClient = blobServiceClient.getContainerClient(containerName);
 
+  const containerClient = blobServiceClient.getContainerClient(containerName);
   return containerClient;
 }
 
@@ -31,7 +31,7 @@ async function uploadImage(image, name, previousImage = "") {
 
   if (imageExists(previousImage)) await deleteImage(previousImage);
 
-  const formattedName = name.replace(/[^\w\s]/gi, '').replace(/\s+/g, '');
+  const formattedName = name.replace(/[^\w\s]/gi, "").replace(/\s+/g, "");
   const blobName = formattedName + uuidv1();
 
   const containerClient = getContainer();
