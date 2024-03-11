@@ -104,6 +104,40 @@ class PostController {
     }
   }
 
+  async findByIDs(req, res) {
+    try {
+      let idsArray = [];
+      const { id } = req.query;
+      if (id) {
+        idsArray = id.split(",");
+      }
+
+      let posts = [];
+
+      if (idsArray.length > 0) {
+        const query = {
+          $or: [
+            { id_categoryfeatures: { $in: idsArray } },
+            { id_categoryprofessions: { $in: idsArray } },
+          ],
+        };
+        posts = await PostModel.find(query);
+        const populatePromises = posts.map(async (post) => {
+          const populatedPost = await PostModel.populate(
+            post,
+            "id_categoryfeatures id_categoryprofessions"
+          );
+          return populatedPost;
+        });
+        posts = await Promise.all(populatePromises);
+      }
+
+      return res.status(200).json(posts);
+    } catch (error) {
+      res.status(500).json({ message: "Error while fetching Posts", error: error.message });
+    }
+  }
+
   async destroy(req, res) {
     try {
       const { id } = req.params;

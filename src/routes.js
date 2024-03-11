@@ -168,6 +168,7 @@ routes.delete("/newsletter/:id", NewsletterValidator.destroy, NewsletterControll
 routes.put("/newsletter/:id", NewsletterValidator.update, NewsletterController.update);
 
 // Post
+routes.get("/posts/find-by-id", PostController.findByIDs);
 routes.post("/posts", PostValidator.create, PostController.create);
 routes.delete("/posts/:id", PostController.destroy);
 routes.put("/posts/:id", PostValidator.update, PostController.update);
