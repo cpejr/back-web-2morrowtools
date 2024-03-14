@@ -35,7 +35,6 @@ class PostController {
 
       return res.status(200).json(post);
     } catch (error) {
-      console.log(error);
       res.status(500).json({ message: "Error while creating post", error: error.message });
     }
   }
@@ -101,6 +100,76 @@ class PostController {
         message: "Error while fetching Posts",
         error: error.message,
       });
+    }
+  }
+
+  async filterCategories(req, res) {
+    try {
+      let idsArray = [];
+      const { id, name, type } = req.query;
+
+      if (id) {
+        idsArray = id.split(",");
+      }
+      let posts = [];
+
+      if (idsArray.length === 0) {
+        posts = await PostModel.find();
+      } else {
+        const query = {
+          $or: [
+            { id_categoryfeatures: { $in: idsArray } },
+            { id_categoryprofessions: { $in: idsArray } },
+          ],
+        };
+        posts = await PostModel.find(query);
+      }
+      const populatePromises = posts.map(async (post) => {
+        const populatedPost = await PostModel.populate(
+          post,
+          "id_categoryfeatures id_categoryprofessions"
+        );
+        return populatedPost;
+      });
+      posts = await Promise.all(populatePromises);
+
+      if (name) {
+        const regexName = new RegExp(name, "i");
+        posts = posts.filter((post) => regexName.test(post.name));
+      }
+      switch (type) {
+        case "name":
+          const OrderedPosts = posts.sort((a, b) => {
+            if (a.name < b.name) {
+              return -1;
+            }
+            if (a.name > b.name) {
+              return 1;
+            }
+            return 0;
+          });
+          posts = OrderedPosts;
+          break;
+        case "date":
+          const OrderedTime = posts.reverse();
+          posts = OrderedTime;
+          break;
+      }
+      const UniquePostObjects = () => {
+        const mapIds = new Map();
+        const UniqueArray = [];
+        posts.forEach((post) => {
+          if (!mapIds.has(post._id)) {
+            mapIds.set(post._id, true);
+            UniqueArray.push(post);
+          }
+        });
+        return UniqueArray;
+      };
+      posts = UniquePostObjects();
+      return res.status(200).json(posts);
+    } catch (error) {
+      res.status(500).json({ message: "Error while fetching Posts", error: error.message });
     }
   }
 
