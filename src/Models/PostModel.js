@@ -19,7 +19,7 @@ const PostSchema = new Schema({
     trim: true,
   },
   html: {
-    type: String,
+    type: Object,
     required: true,
     trim: true,
   },

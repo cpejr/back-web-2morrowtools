@@ -22,7 +22,6 @@ const create = validateRequest({
     id_categoryprofession: z
       .array(z.custom(mongoose.isValidObjectId, "The category profession ID is not valid"))
       .min(1, "At least one category profession ID is required"),
-    html: z.string({ required_error: "The page is required" }),
   }),
 });
 
