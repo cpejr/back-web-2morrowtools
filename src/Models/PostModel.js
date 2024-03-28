@@ -13,11 +13,6 @@ const PostSchema = new Schema({
     required: true,
     trim: true,
   },
-  shortDescription: {
-    type: String,
-    required: true,
-    trim: true,
-  },
   html: {
     type: String,
     required: true,

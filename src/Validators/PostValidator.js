@@ -10,12 +10,6 @@ const create = validateRequest({
     imageUrl: z
       .string({ required_error: "A URL da imagem é obrigatória" })
       .min(1, { message: "O URL deve ter pelo menos 1 caractere" }),
-    shortDescription: z
-      .string({ required_error: "The short description is required" })
-      .min(2, {
-        message: "Short description must be at least 2 characters long",
-      })
-      .max(1000, { message: "Short description must not exceed 1000 characters" }),
     id_categoryfeature: z
       .array(z.custom(mongoose.isValidObjectId, "The category feature ID is not valid"))
       .min(1, "At least one category feature ID is required"),
